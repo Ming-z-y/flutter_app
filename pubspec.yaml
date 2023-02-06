@@ -20,6 +20,8 @@ dependencies:
   video_player: ^2.5.1
   flutter_speed_dial: ^6.2.0
   dio: ^4.0.6
+  http: ^0.13.5
+  retry: ^3.1.0
 
 dev_dependencies:
   flutter_test:
