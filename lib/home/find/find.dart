@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../utils/keepAliveWrapper.dart';
 
 class Find extends StatefulWidget {
   const Find({super.key});
@@ -35,7 +36,7 @@ class _Find extends State<Find> with SingleTickerProviderStateMixin {
             controller: _tabController,
             tabs: tabs
                 .map((e) => Tab(
-                      child: Text(e),
+                      child: KeepAliveWrapper(child: Text(e)),
                     ))
                 .toList()),
       ),
