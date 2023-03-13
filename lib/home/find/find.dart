@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../utils/keepAliveWrapper.dart';
+import 'package:flutter_easyrefresh/easy_refresh.dart';
 
 class Find extends StatefulWidget {
   const Find({super.key});
@@ -42,7 +43,11 @@ class _Find extends State<Find> with SingleTickerProviderStateMixin {
       ),
       body: TabBarView(
         controller: _tabController,
-        children: tabs.map((e) => Text(e)).toList(),
+        children: tabs
+            .map((e) => EasyRefresh(
+                  child: Text(e),
+                ))
+            .toList(),
       ),
     );
   }

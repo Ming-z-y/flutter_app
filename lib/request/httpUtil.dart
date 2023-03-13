@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import './base_config.dart';
+import 'dart:convert' show json;
 
 class HttpUtil {
   static HttpUtil instance = HttpUtil._internal();
@@ -21,11 +22,11 @@ class HttpUtil {
     }
   }
 
-  get(url, {data, options, cancelToken}) async {
+  Future get(url, {data, options, cancelToken}) async {
     try {
       Response response = await _dio!.get(url,
           queryParameters: data, options: options, cancelToken: cancelToken);
-      return response;
+      return response.data;
     } on DioError catch (e) {
       formatError(e);
       return;
@@ -35,11 +36,11 @@ class HttpUtil {
   /*
    * post请求
    */
-  post(url, {data, options, cancelToken}) async {
+  Future post(url, {data, options, cancelToken}) async {
     try {
       Response response = await _dio!.post(url,
           queryParameters: data, options: options, cancelToken: cancelToken);
-      return response;
+      return json.decode(response.toString());
     } on DioError catch (e) {
       formatError(e);
       return;

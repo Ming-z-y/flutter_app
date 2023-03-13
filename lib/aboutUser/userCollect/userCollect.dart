@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:bruno/bruno.dart';
 
 class UserCollect extends StatefulWidget {
+  const UserCollect({super.key});
+
   @override
   _UserCollect createState() {
     // TODO: implement createState
@@ -8,30 +11,38 @@ class UserCollect extends StatefulWidget {
   }
 }
 
-class _UserCollect extends State<UserCollect> {
-  final List list = ["作品", "收藏", "点赞"];
+class _UserCollect extends State<UserCollect> with TickerProviderStateMixin {
+  late TabController tabController;
+  late List<BadgeTab> tabs;
+  @override
+  void initState() {
+    tabs = [BadgeTab(text: "作品"), BadgeTab(text: "收藏"), BadgeTab(text: "点赞")];
+    // final List list = ["作品", "收藏", "点赞"];
+    tabController = TabController(length: tabs.length, vsync: this);
+
+    // int index = 0;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    return Container(
-      padding: EdgeInsets.only(top: 10),
-      child: ListView(
-        shrinkWrap: true, //解决无限高度问题
-        physics: new NeverScrollableScrollPhysics(),
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: list
-                .map((item) => Text(
-                      item,
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-                    ))
-                .toList(),
-          ),
-          Text('div')
-        ],
-      ),
+    return Column(
+      children: [
+        BrnTabBar(
+          tabs: tabs,
+          controller: tabController,
+          onTap: (state, index) {
+            print(index);
+          },
+        ),
+        ListView(
+          shrinkWrap: true, //范围内进行包裹（内容多高ListView就多高）
+          // physics: NeverScrollableScrollPhysics(), //禁止滚动
+          children: const [
+            Text('das'),
+          ],
+        )
+      ],
     );
   }
 }
