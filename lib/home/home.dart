@@ -1,7 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/home/find/find.dart';
 import '../searchPage/search.dart';
 import './hot/hot.dart';
+import '../request/httpUtil.dart';
+import '../utils/keepAliveWrapper.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -19,6 +23,18 @@ class _Home extends State<Home> with SingleTickerProviderStateMixin {
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+    print("************");
+    getData().then((value) {
+      var res = json.decode(value);
+      print(res);
+    });
+  }
+
+  Future<String> getData() async {
+    var res = await HttpUtil.instance
+        .get('/txtjson/classgroup/cgmw_all_editortj_1.txt');
+    // print(data);
+    return res;
   }
 
   @override
@@ -78,8 +94,8 @@ class _Home extends State<Home> with SingleTickerProviderStateMixin {
         ],
       ),
       body: TabBarView(controller: _tabController, children: const [
-        Find(),
-        Hot(),
+        KeepAliveWrapper(child: Find()),
+        KeepAliveWrapper(child: Hot()),
       ]),
     );
   }

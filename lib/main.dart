@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/rich2.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:image_picker/image_picker.dart';
 import './home/home.dart'; // 首页页面
@@ -10,7 +9,6 @@ import './attention/attention.dart'; //  关注页面
 import './message/message.dart'; // 消息页面
 import './login/login.dart'; // 登录页面
 import './publishArticle/publishArticle.dart'; // 写文章页面
-import './rich.dart';
 
 void main() {
   runApp(const MyApp());
@@ -111,7 +109,11 @@ class _Rooter extends State<Rooter> {
   Widget build(BuildContext context) {
     // 设置开始的导航栏和样式
     return Scaffold(
-      body: list[_currentIndex],
+      // 使用IndexedStack实现页面间的缓存
+      body: IndexedStack(
+        index: _currentIndex,
+        children: list,
+      ),
       bottomNavigationBar: BottomNavigationBar(
           fixedColor: const Color.fromRGBO(121, 119, 238, 1),
           currentIndex: _currentIndex,
@@ -123,7 +125,7 @@ class _Rooter extends State<Rooter> {
                   },
                 )
               },
-          selectedFontSize: 15,
+          selectedFontSize: 14,
           items: const [
             BottomNavigationBarItem(icon: Icon(Icons.home), label: "首页"),
             BottomNavigationBarItem(icon: Icon(Icons.favorite), label: "关注"),

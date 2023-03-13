@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyrefresh/easy_refresh.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
@@ -13,55 +14,57 @@ class _SearchPage extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        toolbarHeight: 45,
-        iconTheme: const IconThemeData(color: Color.fromRGBO(125, 122, 238, 1)),
-        title: Row(
-          children: [
-            Expanded(
-              flex: 3,
-              child: Container(
-                height: 40,
-                padding: const EdgeInsets.only(left: 10, right: 10),
-                decoration: const BoxDecoration(
-                  color: Color.fromARGB(255, 217, 215, 215),
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(20),
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          elevation: 0,
+          toolbarHeight: 45,
+          iconTheme:
+              const IconThemeData(color: Color.fromRGBO(125, 122, 238, 1)),
+          title: Row(
+            children: [
+              Expanded(
+                flex: 3,
+                child: Container(
+                  height: 40,
+                  padding: const EdgeInsets.only(left: 10, right: 10),
+                  decoration: const BoxDecoration(
+                    color: Color.fromARGB(255, 217, 215, 215),
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(20),
+                    ),
                   ),
-                ),
-                child: const TextField(
-                  cursorColor: Colors.amber,
-                  style: TextStyle(fontSize: 15),
-                  decoration: InputDecoration(
-                    icon: Icon(Icons.search),
-                    focusColor: Color.fromRGBO(125, 122, 238, 1),
-                    hintText: '搜索的东西',
-                    border: InputBorder.none,
+                  child: const TextField(
+                    cursorColor: Colors.amber,
+                    style: TextStyle(fontSize: 15),
+                    decoration: InputDecoration(
+                      icon: Icon(Icons.search),
+                      focusColor: Color.fromRGBO(125, 122, 238, 1),
+                      hintText: '搜索的东西',
+                      border: InputBorder.none,
+                    ),
                   ),
                 ),
               ),
-            ),
-            Expanded(
-              flex: 1,
-              child: TextButton(
-                  onPressed: () {},
-                  child: const Text(
-                    '搜索',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w700,
-                      color: Color.fromRGBO(125, 122, 238, 1),
-                    ),
-                  )),
-            )
-          ],
+              Expanded(
+                flex: 1,
+                child: TextButton(
+                    onPressed: () {},
+                    child: const Text(
+                      '搜索',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                        color: Color.fromRGBO(125, 122, 238, 1),
+                      ),
+                    )),
+              )
+            ],
+          ),
         ),
-      ),
-      body: Container(
+        body: Container(
           padding: const EdgeInsets.all(10),
-          child: ListView(
+          child: EasyRefresh(
+              child: ListView(
             children: [
               // 历史记录字体
               Container(
@@ -220,6 +223,6 @@ class _SearchPage extends State<SearchPage> {
               ),
             ],
           )),
-    );
+        ));
   }
 }
