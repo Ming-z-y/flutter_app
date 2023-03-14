@@ -9,8 +9,11 @@ import './attention/attention.dart'; //  关注页面
 import './message/message.dart'; // 消息页面
 import './login/login.dart'; // 登录页面
 import './publishArticle/publishArticle.dart'; // 写文章页面
+import './utils/cache.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await AppCache.init();
   runApp(const MyApp());
 }
 
