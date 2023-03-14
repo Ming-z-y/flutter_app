@@ -1,5 +1,6 @@
 import 'package:bruno/bruno.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/utils/cache.dart';
 import '../../utils/showBottomDes.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 
@@ -70,7 +71,7 @@ class _EditMessage extends State<EditMessage> {
               BrnTextSelectFormItem(
                 title: '个人简介',
                 hint: '个人简介',
-                value: '个人',
+                value: AppCache.description,
                 themeData: BrnFormItemConfig(),
                 onTap: () {
                   chooseDescription();
@@ -96,6 +97,7 @@ class _EditMessage extends State<EditMessage> {
               BrnTextSelectFormItem(
                 title: '居住地',
                 hint: 'xxx',
+                value: AppCache.address,
                 onTap: () {
                   writeAddress();
                 },
@@ -111,7 +113,8 @@ class _EditMessage extends State<EditMessage> {
               const Divider(height: 1.5),
               BrnTextSelectFormItem(
                 title: '学校',
-                hint: '重庆邮电大学',
+                value: AppCache.school,
+                hint: '填写您的学校',
                 onTap: () {
                   chooseCollege();
                 },
@@ -153,7 +156,8 @@ class _EditMessage extends State<EditMessage> {
               ),
               BrnTextSelectFormItem(
                 title: '身高',
-                hint: '189cm',
+                hint: '填写您的身高',
+                value: AppCache.height,
                 onTap: () {
                   writeHeight();
                 },
@@ -161,7 +165,8 @@ class _EditMessage extends State<EditMessage> {
               const Divider(height: 1.5),
               BrnTextSelectFormItem(
                 title: '体重',
-                hint: '75kg',
+                hint: '填写您的体重',
+                value: AppCache.weight,
                 onTap: () {
                   chooseWeight();
                 },
@@ -205,21 +210,35 @@ class _EditMessage extends State<EditMessage> {
   }
 
   void chooseDescription() {
-    ShowBottomDes.chooseDescription('填写个人简介', context, (() {
-      print('dad');
+    ShowBottomDes.chooseDescription('填写个人简介', context, ((des) {
+      if (des == '') {
+        return;
+      }
+      AppCache.setDescription(des)
+          .then((value) => {value ? Navigator.of(context).maybePop() : ''});
     }));
   }
 
   void writeOccupation() {
-    ShowBottomDes.chooseDescription('填写你的职业', context, (() {}));
+    ShowBottomDes.chooseDescription('填写你的职业', context, ((des) {}));
   }
 
   void writeAddress() {
-    ShowBottomDes.chooseDescription('填写您的居住地', context, (() {}));
+    ShowBottomDes.chooseDescription('填写您的居住地', context, ((des) {
+      if (des == '') {
+        return;
+      }
+      AppCache.setAddress(des);
+    }));
   }
 
   void writeHeight() {
-    ShowBottomDes.chooseDescription('填写您的身高', context, (() {}));
+    ShowBottomDes.chooseDescription('填写您的身高', context, ((des) {
+      if (des == '') {
+        return;
+      }
+      AppCache.setHeight(des);
+    }));
   }
 
   void chooseBirthday() {
@@ -227,7 +246,12 @@ class _EditMessage extends State<EditMessage> {
   }
 
   void chooseCollege() {
-    ShowBottomDes.chooseDescription("填写大学", context, () {});
+    ShowBottomDes.chooseDescription("填写您的学校", context, (des) {
+      if (des == '') {
+        return;
+      }
+      AppCache.setSchool(des);
+    });
   }
 
   void chooseImage() {
@@ -235,6 +259,11 @@ class _EditMessage extends State<EditMessage> {
   }
 
   void chooseWeight() {
-    ShowBottomDes.chooseDescription("填写您的体重", context, () {});
+    ShowBottomDes.chooseDescription("填写您的体重", context, (des) {
+      if (des == '') {
+        return;
+      }
+      AppCache.setWeight(des);
+    });
   }
 }

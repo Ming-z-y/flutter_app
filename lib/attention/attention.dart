@@ -3,6 +3,8 @@ import '../components/articleItem.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
+import '../utils/refreshComponent.dart';
+
 class Attention extends StatefulWidget {
   const Attention({super.key});
 
@@ -50,6 +52,10 @@ class _Attention extends State<Attention> {
             ),
           ),
           body: EasyRefresh(
+            onRefresh: () async {},
+            onLoad: () async {},
+            header: CustomRefreshHeader(),
+            footer: CustomRefreshFooter(),
             child: ListView(
               children: [
                 ArticleItem(

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/utils/cache.dart';
 import '../../utils/keepAliveWrapper.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
+import '../../request/httpUtil.dart';
+import '../../utils/refreshComponent.dart';
 
 class Find extends StatefulWidget {
   const Find({super.key});
@@ -18,6 +21,13 @@ class _Find extends State<Find> with SingleTickerProviderStateMixin {
   void initState() {
     super.initState();
     _tabController = TabController(length: tabs.length, vsync: this);
+  }
+
+  Future<String> getData() async {
+    var res = await HttpUtil.instance
+        .get('/txtjson/classgroup/cgmw_all_editortj_1.txt');
+    // print(data);
+    return res;
   }
 
   @override
@@ -45,6 +55,10 @@ class _Find extends State<Find> with SingleTickerProviderStateMixin {
         controller: _tabController,
         children: tabs
             .map((e) => EasyRefresh(
+                  onRefresh: () async {},
+                  onLoad: () async {},
+                  header: CustomRefreshHeader(),
+                  footer: CustomRefreshFooter(),
                   child: Text(e),
                 ))
             .toList(),

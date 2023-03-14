@@ -6,8 +6,11 @@ class ShowBottomDes {
   static chooseDescription(
     String title,
     BuildContext context,
-    void Function() onTap,
+
+    /// 点击确定提交回调
+    void Function(String des) onTap,
   ) {
+    TextEditingController textController = TextEditingController();
     BrnBottomPicker.show(
       context,
       onConfirm: () {
@@ -35,9 +38,10 @@ class ShowBottomDes {
               style: const TextStyle(
                   fontSize: 14, color: Color.fromRGBO(164, 163, 183, 1)),
             ),
-            const TextField(
-              cursorColor: Color.fromRGBO(164, 163, 183, 1),
-              decoration: InputDecoration(
+            TextField(
+              controller: textController,
+              cursorColor: const Color.fromRGBO(164, 163, 183, 1),
+              decoration: const InputDecoration(
                 hintText: '请输入',
                 hintStyle: TextStyle(color: Color.fromRGBO(164, 163, 183, 1)),
                 focusColor: Color.fromRGBO(164, 163, 183, 1),
@@ -57,7 +61,7 @@ class ShowBottomDes {
                 width: 180,
                 radius: 20,
                 onTap: () {
-                  onTap();
+                  onTap(textController.text);
                 },
               ),
             ),
