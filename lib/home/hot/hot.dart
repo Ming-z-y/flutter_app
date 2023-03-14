@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../components/rankItem.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
+import '../../utils/refreshComponent.dart';
 
 class Hot extends StatefulWidget {
   const Hot({super.key});
@@ -16,6 +17,10 @@ class _Hot extends State<Hot> {
   @override
   Widget build(BuildContext context) {
     return EasyRefresh(
+      onRefresh: () async {},
+      onLoad: () async {},
+      header: CustomRefreshHeader(),
+      footer: CustomRefreshFooter(),
       child: ListView(
         children: [
           RankItem(
