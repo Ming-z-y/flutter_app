@@ -22,12 +22,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Startup Name Generator',
       home: Rooter(),
       // home: EditorPage(),
       // home: HtmlEditorExampleApp(),
+      theme: ThemeData(
+        backgroundColor: Colors.white,
+      ),
     );
   }
 }
@@ -118,6 +121,7 @@ class _Rooter extends State<Rooter> {
         children: list,
       ),
       bottomNavigationBar: BottomNavigationBar(
+          backgroundColor: Colors.white,
           fixedColor: const Color.fromRGBO(121, 119, 238, 1),
           currentIndex: _currentIndex,
           type: BottomNavigationBarType.fixed,
@@ -137,9 +141,9 @@ class _Rooter extends State<Rooter> {
                 icon: Icon(Icons.account_circle_sharp), label: "我的"),
           ]),
       floatingActionButton: Container(
-          width: 60,
-          height: 60,
-          padding: const EdgeInsets.all(10),
+          width: 50,
+          height: 50,
+          padding: const EdgeInsets.all(6),
           decoration: const BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.all(Radius.circular(30)),

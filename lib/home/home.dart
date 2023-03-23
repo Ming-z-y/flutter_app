@@ -97,6 +97,7 @@ class _Home extends State<Home> with SingleTickerProviderStateMixin {
         KeepAliveWrapper(child: Find()),
         KeepAliveWrapper(child: Hot()),
       ]),
+      backgroundColor: Theme.of(context).backgroundColor,
     );
   }
 }
