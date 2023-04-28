@@ -6,9 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/aboutUser/user.dart';
 import 'package:flutter_application_1/articleDetail/comments.dart';
 import 'package:flutter_application_1/articleDetail/components/videoWeapper.dart';
-import 'package:flutter_application_1/publishArticle/publishVideoWeapper.dart';
 import 'package:flutter_application_1/request/apis.dart';
-import 'package:flutter_application_1/request/httpUtil.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:path_provider/path_provider.dart';
@@ -25,6 +23,7 @@ class ArticleDetail extends StatefulWidget {
 }
 
 class _ArticleDetailState extends State<ArticleDetail> {
+  TextEditingController editingController = TextEditingController();
   bool is_focused = false;
   bool is_liked = false;
   bool is_collected = false;
@@ -66,21 +65,35 @@ class _ArticleDetailState extends State<ArticleDetail> {
         });
       }
     });
-    _getComment();
     super.initState();
   }
 
-  _getComment() {
-    APIS.getComment(work_id: widget.work_id, rank_type: 1).then((value) {
-      print(value.info);
-      print(value.data);
-      print(value.status);
+  publish_comment({
+    required int work_id,
+    required int worker_id,
+    required String content,
+    int to_user_id = 0,
+    int to_comment_id = 0,
+  }) {
+    bool isOk = true;
+    APIS
+        .publishComment(
+      content: content,
+      work_id: work_id,
+      worker_id: worker_id,
+      to_user_id: to_user_id,
+      to_comment_id: to_comment_id,
+    )
+        .then((value) {
       if (value.status == 10001) {
-        setState(() {
-          comment = value.data!;
-        });
+        Fluttertoast.showToast(msg: '评论成功~');
+        editingController.clear();
+      } else {
+        Fluttertoast.showToast(msg: '评论失败');
+        isOk = false;
       }
     });
+    return isOk;
   }
 
   _onTap_focus() async {
@@ -118,8 +131,6 @@ class _ArticleDetailState extends State<ArticleDetail> {
       work_id: data['article_id'],
       need_collect: !is_collected,
     );
-    print(res.status);
-    print(res.info);
     if (res.status == 10001) {
       setState(() {
         is_collected = !is_collected;
@@ -290,10 +301,8 @@ class _ArticleDetailState extends State<ArticleDetail> {
                             onTap: () {
                               showComments(
                                 context: context,
-                                data: comment,
-                                work_id: data['article_id'],
-                                worker_id: data['user_id'],
-                                getComment: _getComment,
+                                work_id: widget.work_id,
+                                user_id: data['user_id'],
                               );
                             },
                             child: Container(
@@ -315,7 +324,11 @@ class _ArticleDetailState extends State<ArticleDetail> {
                           ),
                           InkWell(
                             onTap: () {
-                              print('object');
+                              showComments(
+                                context: context,
+                                work_id: widget.work_id,
+                                user_id: data['user_id'],
+                              );
                             },
                             child: const Icon(
                               Icons.markunread_outlined,

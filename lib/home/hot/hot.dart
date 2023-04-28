@@ -23,9 +23,6 @@ class _Hot extends State<Hot> {
 
   _getData() {
     APIS.hot().then((value) {
-      print(value.data);
-      print(value.status);
-      print(value.info);
       setState(() {
         content = value.data!;
       });
