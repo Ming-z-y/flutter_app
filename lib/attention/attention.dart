@@ -50,15 +50,6 @@ class _Attention extends State<Attention> {
         iconTheme: const IconThemeData(
           color: Color.fromRGBO(65, 53, 85, 1),
         ),
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(
-              Icons.search,
-              color: Colors.black38,
-            ),
-          )
-        ],
         title: const Text(
           '关注',
           style: TextStyle(

@@ -190,19 +190,19 @@ class _MessagePage extends State<MessagePage> {
                             decoration: BoxDecoration(
                               // color: Color.fromRGBO(217, 217, 217, 1),
                               image: index == 1
-                                  ? DecorationImage(
+                                  ? const DecorationImage(
                                       image: AssetImage('assets/image/lc.jpg'))
                                   : index == 2
-                                      ? DecorationImage(
+                                      ? const DecorationImage(
                                           image:
                                               AssetImage('assets/image/pl.jpg'))
                                       : index == 3
-                                          ? DecorationImage(
+                                          ? const DecorationImage(
                                               image: AssetImage(
                                                   'assets/image/fs.jpg'))
-                                          : DecorationImage(
+                                          : const DecorationImage(
                                               image: AssetImage(
-                                                  'assets/image/pl.jpg')),
+                                                  'assets/image/dz.jpg')),
                             ),
                             child: messageNum[index] != 0
                                 ? Center(

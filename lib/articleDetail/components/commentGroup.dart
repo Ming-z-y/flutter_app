@@ -13,6 +13,9 @@ class CommentGroup extends StatefulWidget {
   final String ip_territory;
   final int liked_num;
   final List sons;
+  final int work_id;
+  final int user_id;
+  final Function(String user_name, int to_user, int to_comment) pointToUser;
   const CommentGroup({
     super.key,
     required this.comment_id,
@@ -24,6 +27,9 @@ class CommentGroup extends StatefulWidget {
     required this.ip_territory,
     required this.liked_num,
     required this.sons,
+    required this.pointToUser,
+    required this.work_id,
+    required this.user_id,
   });
 
   @override
@@ -31,7 +37,6 @@ class CommentGroup extends StatefulWidget {
 }
 
 class _CommentGroupState extends State<CommentGroup> {
-  var tabs = ['a', 'b', 'c'];
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -45,25 +50,35 @@ class _CommentGroupState extends State<CommentGroup> {
           at_time: widget.at_time,
           ip_territory: widget.ip_territory,
           liked_num: widget.liked_num,
+          pointToUser: widget.pointToUser,
+          isTop: true,
+          work_id: widget.work_id,
+          user_id: widget.user_id,
         ),
         // widget.sons.isNotEmpty
         //     ? tabs.map((e) => Text('xx')).toList()
         //     : Container()
         ...widget.sons
-            .map((item) => Container(
-                  padding: EdgeInsets.only(left: 35),
-                  margin: EdgeInsets.only(top: 5),
-                  child: CommentsItem(
-                    comment_id: item['comment_id'],
-                    from_user_id: item['from_user_id'],
-                    nick_name: item['nick_name'],
-                    avatar: item['avatar'],
-                    content: item['content'],
-                    at_time: item['at_time'],
-                    ip_territory: item['ip_territory'],
-                    liked_num: item['liked_num'],
-                  ),
-                ))
+            .map(
+              (item) => Container(
+                padding: EdgeInsets.only(left: 35),
+                margin: EdgeInsets.only(top: 5),
+                child: CommentsItem(
+                  comment_id: item['comment_id'],
+                  from_user_id: item['from_user_id'],
+                  nick_name: item['nick_name'],
+                  avatar: item['avatar'],
+                  content: item['content'],
+                  at_time: item['at_time'],
+                  ip_territory: item['ip_territory'],
+                  liked_num: item['liked_num'],
+                  pointToUser: widget.pointToUser,
+                  isTop: false,
+                  work_id: widget.work_id,
+                  user_id: widget.user_id,
+                ),
+              ),
+            )
             .toList()
       ],
     );

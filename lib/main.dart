@@ -23,6 +23,7 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
+  static final navigatorKey = GlobalKey<NavigatorState>();
   const MyApp({super.key});
 
   @override
@@ -32,10 +33,11 @@ class MyApp extends StatelessWidget {
         '/login': ((context) => LoginPage()),
         '/home': (context) => Rooter()
       },
+      navigatorKey: navigatorKey,
       debugShowCheckedModeBanner: false,
       title: 'Startup Name Generator',
-      // home: Rooter(),
-      home: LoginPage(),
+      home: Rooter(),
+      // home: LoginPage(),
       theme: ThemeData(
         backgroundColor: Colors.white,
       ),

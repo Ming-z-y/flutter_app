@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_application_1/login/login.dart';
+import 'package:flutter_application_1/main.dart';
 import 'package:flutter_application_1/request/base_config.dart';
 import 'package:flutter_application_1/request/httpUtil.dart';
 import 'package:flutter_application_1/utils/cache.dart';
@@ -13,36 +15,45 @@ class RefreshTokenInterceptor extends Interceptor {
   }
 
   // @override
-  // void onResponse(Response response, ResponseInterceptorHandler handler) async {
-  //   if (response.data["status"] == 10005) {
-  //     Dio dio = HttpUtil.getDio();
-  //     String token = await getNewToken();
-  //     AppCache.setToken(token);
-  //     var request = response.requestOptions;
-  //     try {
-  //       var res = await dio.request(
-  //         request.path,
-  //         data: request.data,
-  //         queryParameters: request.queryParameters,
-  //         cancelToken: request.cancelToken,
-  //         options: Options(
-  //           method: request.method,
-  //           headers: request.headers,
-  //           contentType: 'application/json',
-  //         ),
-  //         onReceiveProgress: request.onReceiveProgress,
-  //       );
-  //       // super.onResponse(response, handler);
-  //       handler.resolve(res);
-  //       return;
-  //     } on DioError catch (e) {
-  //       print(e);
-  //     }
-  //   }
-  //   // TODO: implement onResponse
-  //   super.onResponse(response, handler);
-  // }
-
+  void onResponse(Response response, ResponseInterceptorHandler handler) async {
+    if (response.data["status"] == 10005) {
+      Dio dio = HttpUtil.getDio();
+      String token = await getNewToken();
+      if (token != '') {
+        await AppCache.setToken(token);
+        var request = response.requestOptions;
+        try {
+          var res = await dio.request(
+            request.path,
+            data: request.data,
+            queryParameters: request.queryParameters,
+            cancelToken: request.cancelToken,
+            options: Options(
+              method: request.method,
+              headers: {
+                "Authorization": "Bearer $token",
+              },
+              contentType: 'application/json',
+            ),
+            onReceiveProgress: request.onReceiveProgress,
+          );
+          // super.onResponse(response, handler);
+          handler.next(response);
+        } on DioError catch (e) {
+          print(e);
+        }
+      } else {
+        final context = MyApp.navigatorKey.currentContext;
+        // 跳转登录页面
+        await Navigator.pushReplacement(
+          context!,
+          MaterialPageRoute(builder: (context) => LoginPage()),
+        );
+      }
+    } else {
+      handler.next(response);
+    }
+  }
 }
 
 Future<String> getNewToken() async {
@@ -56,7 +67,7 @@ Future<String> getNewToken() async {
     if (res.data['status'] == 10001) {
       token = res.data['access_token'];
     } else {
-      // Navigator.pushNamed(context, routeName)
+      token = '';
     }
   } catch (e) {}
   return token;

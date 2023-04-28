@@ -74,8 +74,15 @@ class APIS {
   static Future<ResponseModal<Map<String, dynamic>>> workRecommend(
       int page_num, int page_size,
       {String? type, int? cursor = 0}) async {
-    var data = await HttpUtil().get(
-        '/work?type=$type&page_num=$page_num&page_size=$page_size&cursor=$cursor');
+    var data;
+    if (type == null) {
+      data = await HttpUtil()
+          .get('/work?page_num=$page_num&page_size=$page_size&cursor=$cursor');
+    } else {
+      data = await HttpUtil().get(
+          '/work?type=$type&page_num=$page_num&page_size=$page_size&cursor=$cursor');
+    }
+
     return ResponseModal.fromjson(data);
   }
 
@@ -149,6 +156,24 @@ class APIS {
   static Future<ResponseModal<Map<String, dynamic>>> like(
       {required int scope, required String id}) async {
     var data = await HttpUtil().post('/like?scope=$scope', data: {"id": id});
+    return ResponseModal.fromjson(data);
+  }
+
+  /// 点赞评论
+  static Future<ResponseModal<Map<String, dynamic>>> like_comment({
+    required int comment_id,
+    required int work_id,
+    required bool need_like,
+    required bool is_top,
+    required int worker_id,
+  }) async {
+    var data = await HttpUtil().post('/comment/like', data: {
+      "comment_id": comment_id,
+      "work_id": work_id,
+      "need_like": need_like,
+      "is_top": is_top,
+      "worker_id": worker_id,
+    });
     return ResponseModal.fromjson(data);
   }
 

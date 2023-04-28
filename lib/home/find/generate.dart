@@ -44,8 +44,6 @@ class _GenerateContent extends State<GenerateContent> {
           })
         : APIS.workRecommend(page_num, page_size).then(
             (value) {
-              print(value.status);
-              print(value.data);
               if (value.status == 10001) {
                 setState(() {
                   data = value.data!["works"];

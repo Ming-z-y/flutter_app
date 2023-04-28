@@ -65,6 +65,7 @@ flutter:
     - assets/image/lc.jpg
     - assets/image/fs.jpg
     - assets/image/pl.jpg
+    - assets/image/dz.jpg
 
 fonts:
   - family: MyIcons
