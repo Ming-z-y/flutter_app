@@ -1,7 +1,10 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/articleDetail/articleDetail.dart';
 import 'package:flutter_application_1/home/find/find.dart';
+import 'package:flutter_application_1/request/apis.dart';
+import 'package:flutter_application_1/utils/cache.dart';
 import '../searchPage/search.dart';
 import './hot/hot.dart';
 import '../request/httpUtil.dart';
@@ -23,59 +26,50 @@ class _Home extends State<Home> with SingleTickerProviderStateMixin {
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
-    print("************");
-    getData().then((value) {
-      var res = json.decode(value);
-      print(res);
-    });
-  }
-
-  Future<String> getData() async {
-    var res = await HttpUtil.instance
-        .get('/txtjson/classgroup/cgmw_all_editortj_1.txt');
-    // print(data);
-    return res;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: Colors.white, // appBar的背景颜色
         centerTitle: true,
         toolbarHeight: 40,
         elevation: 0, // 去掉Appbar底部阴影
+        titleSpacing: 0,
         title: Row(
           children: [
             Expanded(
-              flex: 2,
+              flex: 4,
               child: TextButton(
                 child: Text('每日一答'),
                 onPressed: () {},
               ),
             ),
             const Expanded(
-              flex: 1,
+              flex: 2,
               child: SizedBox(),
             ),
             Expanded(
-              flex: 6,
+              flex: 10,
               child: TabBar(
-                  isScrollable: true, // tabs是否可以滚动
-                  indicatorColor: Colors.white, // 指示器的颜色
-                  controller: _tabController,
-                  labelColor: Colors.black, // label的颜色
-                  labelStyle: const TextStyle(
-                      fontSize: 20, fontWeight: FontWeight.w800), // label的样式
-                  unselectedLabelColor: Colors.black38, // 设置没有选中的label的颜色
-                  tabs: const [
-                    Tab(
-                      child: Text("发现"),
-                    ),
-                    Tab(
-                      child: Text("热榜"),
-                    ),
-                  ]),
+                isScrollable: true, // tabs是否可以滚动
+                indicatorColor: Colors.white, // 指示器的颜色
+                controller: _tabController,
+                labelColor: Colors.black, // label的颜色
+                labelStyle: const TextStyle(
+                    fontSize: 20, fontWeight: FontWeight.w800), // label的样式
+                unselectedLabelColor: Colors.black38, // 设置没有选中的label的颜色
+                tabs: const [
+                  Tab(
+                    child: Text("发现"),
+                  ),
+                  Tab(
+                    child: Text("热榜"),
+                  ),
+                ],
+              ),
             )
           ],
         ),
@@ -93,10 +87,13 @@ class _Home extends State<Home> with SingleTickerProviderStateMixin {
               ))
         ],
       ),
-      body: TabBarView(controller: _tabController, children: const [
-        KeepAliveWrapper(child: Find()),
-        KeepAliveWrapper(child: Hot()),
-      ]),
+      body: TabBarView(
+          physics: const NeverScrollableScrollPhysics(),
+          controller: _tabController,
+          children: const [
+            KeepAliveWrapper(child: Find()),
+            KeepAliveWrapper(child: Hot()),
+          ]),
       backgroundColor: Theme.of(context).backgroundColor,
     );
   }

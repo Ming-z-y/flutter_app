@@ -1,40 +1,61 @@
 import './httpUtil.dart';
 
+class ResponseModal<T> {
+  late final int status;
+  late final String info;
+  late T? data;
+
+  ResponseModal.fromjson(Map<String, dynamic> json) {
+    status = json["status"] as int;
+    info = json["info"] as String;
+    if (json["data"] != null) {
+      data = json["data"];
+    }
+  }
+}
+
 class APIS {
   /// 验证码登录接口
-  static Future<String> loginByCode(String phone, String code) async {
-    var data =
-        await HttpUtil().post('/user/login-nu-code', data: {phone, code});
-    return data;
+  static Future<ResponseModal<Map<String, dynamic>>> loginByCode(
+      String phone, String code) async {
+    var data = await HttpUtil()
+        .post('/user/login-by-code', data: {"phone": phone, "code": code});
+    return ResponseModal.fromjson(data);
   }
 
   /// 获取验证码
-  static Future<String> getCode(String phone) async {
-    var data = await HttpUtil().post('/user/get-code', data: {phone});
+  static Future<Map<String, dynamic>> getCode(String phone) async {
+    var data = await HttpUtil().post('/user/get-code', data: {"phone": phone});
+    // print(data);
     return data;
   }
 
   /// 密码登录接口
-  static Future<String> loginByPassword(String phone, String password) async {
-    var data = await HttpUtil()
-        .post('/user/login-by-password', data: {phone, password});
-    return data;
+  static Future<ResponseModal<Map<String, dynamic>>> loginByPassword(
+      String phone, String password) async {
+    var data = await HttpUtil().post('/user/login-by-password',
+        data: {"phone": phone, "password": password});
+    return ResponseModal.fromjson(data);
   }
 
   /// 用户注册
-  static Future<String> register(
-      String phone, String code, String password) async {
-    var data =
-        await HttpUtil().post('/user/register', data: {phone, code, password});
-    return data;
+  static Future<ResponseModal<Map<String, dynamic>>> register(
+      String phone, String code, String password, String nick_name) async {
+    var data = await HttpUtil().post('/user/register', data: {
+      "phone": phone,
+      "code": code,
+      "password": password,
+      "nick_name": nick_name
+    });
+    return ResponseModal.fromjson(data);
   }
 
   /// 密码重置
-  static Future<String> resetPassword(
+  static Future<ResponseModal<Map<String, dynamic>>> resetPassword(
       String phone, String code, String password) async {
-    var data = await HttpUtil()
-        .post('/user/reset-password', data: {phone, code, password});
-    return data;
+    var data = await HttpUtil().post('/user/reset-password',
+        data: {"phone": phone, "code": code, "password": password});
+    return ResponseModal.fromjson(data);
   }
 
   /// 每日一题
@@ -44,136 +65,229 @@ class APIS {
   }
 
   /// 热榜
-  static Future<String> hot() async {
+  static Future<ResponseModal<List<dynamic>>> hot() async {
     var data = await HttpUtil().get('/work/hot');
-    return data;
+    return ResponseModal.fromjson(data);
   }
 
   /// 推荐作品
-  static Future<String> workRecommend(
-      {int? page_num, int? page_size, String? type}) async {
-    var data = await HttpUtil()
-        .get('/work?type=$type&page_num=$page_num&page_size=$page_size');
-    return data;
+  static Future<ResponseModal<Map<String, dynamic>>> workRecommend(
+      int page_num, int page_size,
+      {String? type, int? cursor = 0}) async {
+    var data = await HttpUtil().get(
+        '/work?type=$type&page_num=$page_num&page_size=$page_size&cursor=$cursor');
+    return ResponseModal.fromjson(data);
   }
 
   /// 搜索接口
-  static Future<String> search(String scope, String key,
-      {int? page_num, int? page_size}) async {
-    var data = await HttpUtil().get(
-        '/search?scope=$scope&key=$key&page_num=$page_num&page_size=$page_size');
-    return data;
+  static Future<ResponseModal<List<dynamic>>> search(
+      {int? page_num,
+      int? page_size,
+      required int scope,
+      required String key}) async {
+    var data = await HttpUtil().get('/search?scope=$scope&key=$key');
+    return ResponseModal.fromjson(data);
   }
 
   /// 获取关注用户最新作品
-  static Future<String> getFocusWork({int? user_id}) async {
-    var data = await HttpUtil().get('/focus/work?user_id=$user_id');
-    return data;
+  static Future<ResponseModal<dynamic>> getFocusWork(
+      {int? user_id, int? cursor}) async {
+    var data;
+    if (user_id == null) {
+      data = await HttpUtil().get('/focus/work?cursor=$cursor');
+    } else if (cursor == null) {
+      data = await HttpUtil().get('/focus/work?user_id=$user_id');
+    } else {
+      data =
+          await HttpUtil().get('/focus/work?user_id=$user_id&cursor=$cursor');
+    }
+    return ResponseModal.fromjson(data);
   }
 
   /// 关注用户
-  static Future<String> focusPeople(int user_id) async {
-    var data = await HttpUtil().post('/focus', data: {user_id});
-    return data;
+  static Future<ResponseModal<Map<String, dynamic>>> focusPeople(
+      {required int user_id, required bool need_focus}) async {
+    var data = await HttpUtil()
+        .post('/focus', data: {"user_id": user_id, "need_focus": need_focus});
+    return ResponseModal.fromjson(data);
   }
 
   /// 获取关注列表
-  static Future<String> getFocus({int? page_num, int? page_size}) async {
-    var data = await HttpUtil().get('/getFocus');
-    return data;
+  static Future<ResponseModal<dynamic>> getFocus(int cursor,
+      {int? page_num, int? page_size}) async {
+    var data = await HttpUtil().get('/get-focus');
+    return ResponseModal.fromjson(data);
   }
 
   /// 发表评论
-  static Future<String> publishComment(
-      String content, int work_id, int to_comment_id) async {
-    var data = await HttpUtil()
-        .post('/publish-comment', data: {content, work_id, to_comment_id});
-    return data;
+  static Future<ResponseModal<dynamic>> publishComment({
+    required String content,
+    required int work_id,
+    required int worker_id,
+    required int to_user_id,
+    required int to_comment_id,
+  }) async {
+    var data = await HttpUtil().post('/publish-comment', data: {
+      "content": content,
+      "work_id": work_id,
+      "to_comment_id": to_comment_id,
+      "worker_id": worker_id,
+      "to_user_id": to_user_id
+    });
+    return ResponseModal.fromjson(data);
   }
 
   /// 获取评论
-  static Future<String> getComment(int rank_type, int work_id) async {
+  static Future<ResponseModal<List<dynamic>>> getComment(
+      {required int rank_type, required int work_id}) async {
     var data = await HttpUtil()
-        .post('/getComment?rank_type=$rank_type', data: {work_id});
-    return data;
+        .post('/get-comment?rank_type=$rank_type', data: {"work_id": work_id});
+    return ResponseModal.fromjson(data);
   }
 
   /// 点赞
-  static Future<String> like(int scope, String id) async {
-    var data = await HttpUtil().post('/like?scope=$scope', data: {id});
-    return data;
+  static Future<ResponseModal<Map<String, dynamic>>> like(
+      {required int scope, required String id}) async {
+    var data = await HttpUtil().post('/like?scope=$scope', data: {"id": id});
+    return ResponseModal.fromjson(data);
+  }
+
+  /// 点赞作品
+  static Future<ResponseModal<Map<String, dynamic>>> like_work({
+    required int work_id,
+    required int worker_id,
+    required bool need_like,
+  }) async {
+    var data = await HttpUtil().post(
+      '/work/like',
+      data: {
+        "work_id": work_id,
+        "need_like": need_like,
+        "worker_id": work_id,
+      },
+    );
+    return ResponseModal.fromjson(data);
+  }
+
+  /// 获取 oss 上传凭证
+  static Future<ResponseModal<Map<String, dynamic>>> getOSSToken() async {
+    var data = await HttpUtil().get('/oss/token');
+    return ResponseModal.fromjson(data);
   }
 
   /// 收藏作品
-  static Future<String> collection(int work_id) async {
-    var data = await HttpUtil().post('/collection', data: {work_id});
-    return data;
+  static Future<ResponseModal<Map<String, dynamic>>> collection(
+      {required int work_id, required bool need_collect}) async {
+    var data = await HttpUtil().post('/collection', data: {
+      "work_id": work_id,
+      "need_collect": need_collect,
+    });
+    return ResponseModal.fromjson(data);
   }
 
   /// 获取自身用户信息
-  static Future<String> getSelfInfo() async {
+  static Future<ResponseModal<Map<String, dynamic>>> getSelfInfo() async {
     var data = await HttpUtil().get('/user/self');
-    return data;
+    return ResponseModal.fromjson(data);
   }
 
   /// 获取自身用户创作作品
-  static Future<String> getSelfWork() async {
+  static Future<ResponseModal<List<dynamic>>> getSelfWork() async {
     var data = await HttpUtil().get('/user/self/work');
-    return data;
+    return ResponseModal.fromjson(data);
   }
 
   /// 获取自身用户收藏作品
-  static Future<String> getSelfCollection() async {
+  static Future<ResponseModal<List<dynamic>>> getSelfCollection() async {
     var data = await HttpUtil().get('/user/self/collection');
-    return data;
+    return ResponseModal.fromjson(data);
   }
 
   /// 获取自身用户点赞作品
-  static Future<String> getSelfLike() async {
+  static Future<ResponseModal<List<dynamic>>> getSelfLike() async {
     var data = await HttpUtil().get('/user/self/like');
-    return data;
+    return ResponseModal.fromjson(data);
+  }
+
+  /// 获取作品详情
+  static Future<ResponseModal<Map<String, dynamic>>> getDetail(
+      {required int work_id}) async {
+    var data = await HttpUtil().get('/work-detail?work_id=$work_id');
+    return ResponseModal.fromjson(data);
   }
 
   /// 获取其他用户信息
-  static Future<String> getOtherInfo(int user_id) async {
-    var data = await HttpUtil().post('/user/other', data: {user_id});
-    return data;
+  static Future<ResponseModal<Map<String, dynamic>>> getOtherInfo(
+      {required int user_id}) async {
+    var data = await HttpUtil().post('/user/other', data: {"user_id": user_id});
+    return ResponseModal.fromjson(data);
   }
 
   /// 获取其他用户作品
-  static Future<String> getOtherWork(int user_id,
-      {int? page_size, int? page_num}) async {
-    var data = await HttpUtil().post(
-        '/user/other/work?page_size=$page_size&page_num=$page_num',
-        data: {user_id});
-    return data;
+  static Future<ResponseModal<List<dynamic>>> getOtherWork(
+      {required int user_id, int? page_size, int? page_num}) async {
+    var data =
+        await HttpUtil().post('/user/other/work', data: {"user_id": user_id});
+    return ResponseModal.fromjson(data);
   }
 
   /// 获取其他用户收藏作品
-  static Future<String> getOtherCollection(int user_id,
-      {int? page_size, int? page_num}) async {
-    var data = await HttpUtil().post(
-        '/user/other/collection?page_size=$page_size&page_num=$page_num',
-        data: {user_id});
-    return data;
+  static Future<ResponseModal<List<dynamic>>> getOtherCollection(
+      {required int user_id, int? page_size, int? page_num}) async {
+    var data = await HttpUtil()
+        .post('/user/other/collection', data: {"user_id": user_id});
+    return ResponseModal.fromjson(data);
+  }
+
+  /// 获取分类
+  static Future<ResponseModal<List<dynamic>>> getCategory() async {
+    var data = await HttpUtil().get('/category');
+    return ResponseModal.fromjson(data);
   }
 
   /// 获取其他用户点赞作品
-  static Future<String> getOtherLike(int user_id,
-      {int? page_size, int? page_num}) async {
-    var data = await HttpUtil().post(
-        '/user/other/like?page_size=$page_size&page_num=$page_num',
-        data: {user_id});
-    return data;
+  static Future<ResponseModal<List<dynamic>>> getOtherLike(
+      {required int user_id, int? page_size, int? page_num}) async {
+    var data =
+        await HttpUtil().post('/user/other/like', data: {"user_id": user_id});
+    return ResponseModal.fromjson(data);
+  }
+
+  /// 获取历史消息
+  static Future<ResponseModal<List<dynamic>>> getOldMessage() async {
+    var data = await HttpUtil().get('/old-message');
+    return ResponseModal.fromjson(data);
   }
 
   /// 发布作品
-  static Future<String> publicWork(
-      int scope, String type, String title, String imge_url, String content_url,
-      {String? outlined}) async {
-    var data = await HttpUtil().post('/work?scope=$scope',
-        data: {scope, type, title, imge_url, content_url, outlined});
-    return data;
+  static Future<ResponseModal> publishWork({
+    String? outlined,
+    required int scope,
+    required String title,
+    required String image_url,
+    required String content_url,
+    required String work_class,
+  }) async {
+    var data;
+    if (outlined == null) {
+      data = await HttpUtil().post('/work', data: {
+        "class": work_class,
+        "scope": scope,
+        "title": title,
+        "image_url": image_url,
+        "content_url": content_url,
+      });
+    } else {
+      data = await HttpUtil().post('/work', data: {
+        "class": work_class,
+        "scope": scope,
+        "title": title,
+        "image_url": image_url,
+        "content_url": content_url,
+        "outlined": outlined
+      });
+    }
+    return ResponseModal.fromjson(data);
   }
 
   ///

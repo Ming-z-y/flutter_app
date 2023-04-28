@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/searchPage/searchresult.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 
 import '../utils/refreshComponent.dart';
@@ -13,6 +14,20 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPage extends State<SearchPage> {
+  TextEditingController _controller = TextEditingController();
+
+  _search() {
+    if (_controller.text != '') {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => SearchResult(
+            searchKey: _controller.text,
+          ),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,22 +41,25 @@ class _SearchPage extends State<SearchPage> {
             Expanded(
               flex: 3,
               child: Container(
-                height: 40,
+                alignment: Alignment.center,
+                height: 30,
                 padding: const EdgeInsets.only(left: 10, right: 10),
                 decoration: const BoxDecoration(
-                  color: Color.fromARGB(255, 217, 215, 215),
+                  color: Color.fromRGBO(246, 246, 246, 1),
                   borderRadius: BorderRadius.all(
                     Radius.circular(20),
                   ),
                 ),
-                child: const TextField(
+                child: TextField(
+                  controller: _controller,
                   cursorColor: Colors.amber,
-                  style: TextStyle(fontSize: 15),
-                  decoration: InputDecoration(
+                  style: const TextStyle(fontSize: 15),
+                  decoration: const InputDecoration(
                     icon: Icon(Icons.search),
                     focusColor: Color.fromRGBO(125, 122, 238, 1),
                     hintText: '搜索的东西',
                     border: InputBorder.none,
+                    isCollapsed: true,
                   ),
                 ),
               ),
@@ -49,7 +67,7 @@ class _SearchPage extends State<SearchPage> {
             Expanded(
               flex: 1,
               child: TextButton(
-                  onPressed: () {},
+                  onPressed: _search,
                   child: const Text(
                     '搜索',
                     style: TextStyle(

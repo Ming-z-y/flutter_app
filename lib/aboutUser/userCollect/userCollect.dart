@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:bruno/bruno.dart';
+import 'package:flutter_application_1/aboutUser/userCollect/bump.dart';
+import 'package:flutter_application_1/aboutUser/userCollect/collect.dart';
+import 'package:flutter_application_1/aboutUser/userCollect/works.dart';
+import 'package:flutter_application_1/utils/keepAliveWrapper.dart';
 
 class UserCollect extends StatefulWidget {
   const UserCollect({super.key});
@@ -14,6 +18,12 @@ class UserCollect extends StatefulWidget {
 class _UserCollect extends State<UserCollect> with TickerProviderStateMixin {
   late TabController tabController;
   late List<BadgeTab> tabs;
+  int _index = 0;
+  List<Widget> content = [
+    KeepAliveWrapper(child: Works()),
+    KeepAliveWrapper(child: Collects()),
+    KeepAliveWrapper(child: Bumps()),
+  ];
   @override
   void initState() {
     tabs = [BadgeTab(text: "作品"), BadgeTab(text: "收藏"), BadgeTab(text: "点赞")];
@@ -32,16 +42,12 @@ class _UserCollect extends State<UserCollect> with TickerProviderStateMixin {
           tabs: tabs,
           controller: tabController,
           onTap: (state, index) {
-            print(index);
+            setState(() {
+              _index = index;
+            });
           },
         ),
-        ListView(
-          shrinkWrap: true, //范围内进行包裹（内容多高ListView就多高）
-          // physics: NeverScrollableScrollPhysics(), //禁止滚动
-          children: const [
-            Text('das'),
-          ],
-        )
+        content[_index]
       ],
     );
   }

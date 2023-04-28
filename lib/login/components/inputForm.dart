@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/login/components/bottomText.dart';
 import 'package:flutter_application_1/main.dart';
-import '../forget.dart';
+import 'package:flutter_application_1/request/apis.dart';
+import 'package:flutter_application_1/utils/cache.dart';
+import 'package:flutter_application_1/utils/checkForm.dart';
+import 'package:flutter_application_1/utils/showLoadingDialog.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import '../forgetAndRegister.dart';
 
 class InputForm extends StatefulWidget {
   const InputForm({super.key});
@@ -13,6 +19,68 @@ class InputForm extends StatefulWidget {
 
 class _InputForm extends State<InputForm> {
   String type = 'code';
+  static final TextEditingController _phone = TextEditingController();
+  static final TextEditingController _code = TextEditingController();
+  static final TextEditingController _pwd = TextEditingController();
+
+  Map<String, String> getValue() {
+    Map<String, String> res;
+    if (type == 'code') {
+      res = {"phone": _phone.text, "code": _code.text};
+    } else {
+      res = {"phone": _phone.text, "pwd": _pwd.text};
+    }
+    return res;
+  }
+
+  _handleLogin() async {
+    Map<String, String> res = getValue();
+    // ResponseModal<Map<String, dynamic>> data = ResponseModal.fromjson({});
+    if (CheckForm.checkFormIsFull(res) != "ok") {
+      return Fluttertoast.showToast(msg: "表单未填写完整");
+    }
+    if (CheckForm.checkPhone(res["phone"]!) != 'ok') {
+      return Fluttertoast.showToast(msg: "手机号不合法");
+    }
+    if (!Bottom.isPoint) return Fluttertoast.showToast(msg: "未选中下方协议");
+
+    if (type == 'code') {
+      ResponseModal<Map<String, dynamic>> value =
+          await APIS.loginByCode(res["phone"]!, res["code"]!);
+      if (value.status == 10001) {
+        showLoadingDialog(context);
+        await AppCache.setToken(value.data!["access_token"]);
+        await AppCache.setRefreshToken(value.data!["refresh_token"]);
+        Navigator.pop(context);
+        Navigator.pushReplacementNamed(context, '/home');
+        // showLoadingDialog(context);
+      } else {
+        return Fluttertoast.showToast(msg: "手机号或者验证码不正确~");
+      }
+    } else {
+      ResponseModal<Map<String, dynamic>> value =
+          await APIS.loginByPassword(res["phone"]!, res["pwd"]!);
+      if (value.status == 10001) {
+        showLoadingDialog(context);
+        await AppCache.setToken(value.data!["access_token"]);
+        await AppCache.setRefreshToken(value.data!["refresh_token"]);
+        Navigator.pop(context);
+        Navigator.pushReplacementNamed(context, '/home');
+        // showLoadingDialog(context);
+      } else {
+        return Fluttertoast.showToast(msg: "手机号或者密码不正确~");
+      }
+    }
+  }
+
+  getCode() {
+    Map<String, String> res = getValue();
+    if (CheckForm.checkPhone(res["phone"]!) != 'ok') {
+      return Fluttertoast.showToast(msg: "手机号不合法");
+    }
+    APIS.getCode(res["phone"]!);
+    return Fluttertoast.showToast(msg: "注意查收信息~");
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +93,7 @@ class _InputForm extends State<InputForm> {
                 margin: const EdgeInsets.only(bottom: 60, top: 20),
                 padding: const EdgeInsets.fromLTRB(20, 20, 20, 10),
                 decoration: const BoxDecoration(
-                  color: Colors.amber,
+                  color: Colors.white,
                   borderRadius: BorderRadius.all(Radius.circular(25.0)),
                   boxShadow: [
                     BoxShadow(
@@ -40,11 +108,14 @@ class _InputForm extends State<InputForm> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      child: Stack(children: const [
+                      child: Stack(children: [
                         TextField(
-                          cursorColor: Colors.amber,
+                          controller: _phone,
+                          cursorColor: Colors.white,
                           decoration: InputDecoration(
-                            icon: Icon(Icons.phone),
+                            icon: Icon(
+                              Icons.phone,
+                            ),
                             focusColor: Color.fromRGBO(125, 122, 238, 1),
                             labelText: '手机号',
                           ),
@@ -63,17 +134,20 @@ class _InputForm extends State<InputForm> {
                     ),
                     Container(
                       child: Stack(children: [
-                        const TextField(
+                        TextField(
+                          controller: _code,
                           decoration: InputDecoration(
                             labelText: '验证码',
-                            icon: Icon(Icons.add_box_rounded),
+                            icon: Icon(Icons.lock),
                           ),
                         ),
                         Positioned(
                           right: 0,
                           top: 10,
                           child: TextButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              getCode();
+                            },
                             child: const Text(
                               '获取验证码',
                               style: TextStyle(
@@ -104,7 +178,14 @@ class _InputForm extends State<InputForm> {
                           Positioned(
                               right: 0,
                               child: TextButton(
-                                onPressed: (() {}),
+                                onPressed: (() {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: ((BuildContext context) {
+                                    return Forget(
+                                      name: "注册",
+                                    );
+                                  })));
+                                }),
                                 child: const Text(
                                   '用户注册',
                                   style: TextStyle(
@@ -122,7 +203,7 @@ class _InputForm extends State<InputForm> {
                 margin: const EdgeInsets.only(bottom: 60, top: 20),
                 padding: const EdgeInsets.fromLTRB(20, 20, 20, 10),
                 decoration: const BoxDecoration(
-                  color: Colors.amber,
+                  color: Colors.white,
                   borderRadius: BorderRadius.all(Radius.circular(25.0)),
                   boxShadow: [
                     BoxShadow(
@@ -137,9 +218,10 @@ class _InputForm extends State<InputForm> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      child: Stack(children: const [
+                      child: Stack(children: [
                         TextField(
-                          cursorColor: Colors.amber,
+                          controller: _phone,
+                          cursorColor: Colors.white,
                           decoration: InputDecoration(
                             icon: Icon(Icons.phone),
                             focusColor: Color.fromRGBO(125, 122, 238, 1),
@@ -158,10 +240,12 @@ class _InputForm extends State<InputForm> {
                         )
                       ]),
                     ),
-                    const TextField(
+                    TextField(
+                      obscureText: true,
+                      controller: _pwd,
                       decoration: InputDecoration(
                         labelText: '密码',
-                        icon: Icon(Icons.add_box_rounded),
+                        icon: Icon(Icons.lock),
                       ),
                     ),
                     // 密码登录按钮
@@ -186,7 +270,9 @@ class _InputForm extends State<InputForm> {
                             onPressed: (() {
                               Navigator.of(context).push(MaterialPageRoute(
                                   builder: ((BuildContext context) {
-                                return Forget();
+                                return Forget(
+                                  name: "忘记密码",
+                                );
                               })));
                             }),
                             child: const Text(
@@ -199,7 +285,14 @@ class _InputForm extends State<InputForm> {
                         Positioned(
                           right: 0,
                           child: TextButton(
-                            onPressed: (() {}),
+                            onPressed: (() {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: ((BuildContext context) {
+                                return Forget(
+                                  name: "注册",
+                                );
+                              })));
+                            }),
                             child: const Text(
                               '用户注册',
                               style: TextStyle(
@@ -227,9 +320,7 @@ class _InputForm extends State<InputForm> {
               ),
             ),
             onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(builder: ((context) {
-                return const Rooter();
-              })));
+              _handleLogin();
             },
             child: const Text("登录"),
           ),

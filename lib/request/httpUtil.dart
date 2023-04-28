@@ -1,14 +1,23 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
+import 'package:flutter_application_1/request/tokenInterceptor.dart';
+import 'package:flutter_application_1/utils/cache.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import './base_config.dart';
 import 'dart:convert' show json;
 
 class HttpUtil {
   static HttpUtil instance = HttpUtil._internal();
-  Dio? _dio;
+  static Dio? _dio;
   late BaseOptions options;
   factory HttpUtil() => instance;
 
   CancelToken cancelToken = CancelToken();
+
+  static getDio() {
+    return _dio;
+  }
 
   HttpUtil._internal() {
     if (_dio == null) {
@@ -19,6 +28,7 @@ class HttpUtil {
         responseType: ResponseType.json,
       );
       _dio = Dio(options);
+      _dio!.interceptors.add(RefreshTokenInterceptor());
     }
   }
 
@@ -38,9 +48,10 @@ class HttpUtil {
    */
   Future post(url, {data, options, cancelToken}) async {
     try {
-      Response response = await _dio!.post(url,
-          queryParameters: data, options: options, cancelToken: cancelToken);
-      return json.decode(response.toString());
+      Response response = await _dio!
+          .post(url, data: data, options: options, cancelToken: cancelToken);
+      // return json.decode(response.toString());
+      return response.data;
     } on DioError catch (e) {
       formatError(e);
       return;
@@ -70,11 +81,11 @@ class HttpUtil {
    * error统一处理
    */
   void formatError(DioError e) {
-    print('e.response.statusCode');
-    print(e.response?.statusCode);
     if (e.type == DioErrorType.connectTimeout) {
       // It occurs when url is opened timeout.
+
       print("连接超时");
+      EasyLoading.showError("断线重连中");
     } else if (e.type == DioErrorType.sendTimeout) {
       // It occurs when url is sent timeout.
       print("请求超时");

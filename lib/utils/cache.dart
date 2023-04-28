@@ -3,7 +3,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 /// 缓存里的值的键名, 格式因人因项目而异，我这里取得比较简单
 class CacheKey {
   /// token
-  static const String TOKEN = 'app_token';
+  static const String TOKEN =
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo3LCJpc3MiOiJjb2xkIGJpbiIsInN1YiI6InNtYWEgYXBwIiwiYXVkIjpbInNtYWEgYXBwIl0sImV4cCI6MTY4MTc5NjU1NSwibmJmIjoxNjgxNzg5MzU1LCJpYXQiOjE2ODE3ODkzNTV9.Kxne50kW954Yxc8ibQYl7-L4mWvCp4FuJ-SEyFLEdnc';
+
+  /// refresh_token
+  static const String REFRESH_TOKEN =
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo3LCJpc3MiOiJjb2xkIGJpbiIsImV4cCI6MTY4MTgzNDc4MCwibmJmIjoxNjgxMjI5OTgwLCJpYXQiOjE2ODEyMjk5ODB9.C8-F4SGEz5ujB-yn152Zh9wrrNzHgeyS1k1oALGNr-A';
 
   /// phone
   static const String PHONE = 'app_phone';
@@ -57,6 +62,11 @@ class AppCache {
     return await _pre.setString(CacheKey.TOKEN, token);
   }
 
+  ///  封装设置refresh_token的方法
+  static Future<bool> setRefreshToken(String token) async {
+    return await _pre.setString(CacheKey.REFRESH_TOKEN, token);
+  }
+
   ///  封装设置username的方法
   static Future<bool> setUsername(String username) async {
     return await _pre.setString(CacheKey.USERNAME, username);
@@ -94,6 +104,9 @@ class AppCache {
 
   ///  封装获取token的方法
   static String? get token => _pre.getString(CacheKey.TOKEN);
+
+  ///  封装获取refresh_token的方法
+  static String? get refresh_token => _pre.getString(CacheKey.REFRESH_TOKEN);
 
   ///  封装设置phone的方法
   static Future<bool> setPhone(String phone) async {

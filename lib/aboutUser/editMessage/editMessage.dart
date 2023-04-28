@@ -1,4 +1,5 @@
 import 'package:bruno/bruno.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/utils/cache.dart';
 import '../../utils/showBottomDes.dart';
@@ -7,7 +8,11 @@ import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'brn1RowDelegate.dart';
 
 class EditMessage extends StatefulWidget {
-  const EditMessage({super.key});
+  late String avatar;
+  EditMessage({
+    super.key,
+    required this.avatar,
+  });
 
   @override
   State<EditMessage> createState() {
@@ -53,8 +58,11 @@ class _EditMessage extends State<EditMessage> {
                 onTap: () {
                   chooseImage();
                 },
-                child: Image.network(
-                  'https://p.qqan.com/up/2021-6/16234652484532758.jpg',
+                // child: Image.network(
+                //   'https://p.qqan.com/up/2021-6/16234652484532758.jpg',
+                // ),
+                child: CachedNetworkImage(
+                  imageUrl: widget.avatar,
                 ),
               ),
               // child: Image.network(
