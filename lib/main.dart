@@ -1,8 +1,11 @@
-import 'dart:math';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/publishArticle/reviewUploadVideo.dart';
+import 'package:flutter_application_1/publishArticle/uploadResult.dart';
+import 'package:flutter_application_1/utils/chooseIsGetCamera.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-import 'package:image_picker/image_picker.dart';
 import './home/home.dart'; // 首页页面
 import './aboutUser/user.dart'; // 用户页面
 import './attention/attention.dart'; //  关注页面
@@ -10,10 +13,12 @@ import './message/message.dart'; // 消息页面
 import './login/login.dart'; // 登录页面
 import './publishArticle/publishArticle.dart'; // 写文章页面
 import './utils/cache.dart';
+import 'utils/eventBus.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await AppCache.init();
+  EventBusUtils.init();
   runApp(const MyApp());
 }
 
@@ -23,73 +28,18 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      routes: {
+        '/login': ((context) => LoginPage()),
+        '/home': (context) => Rooter()
+      },
       debugShowCheckedModeBanner: false,
       title: 'Startup Name Generator',
-      home: Rooter(),
-      // home: EditorPage(),
-      // home: HtmlEditorExampleApp(),
+      // home: Rooter(),
+      home: LoginPage(),
       theme: ThemeData(
         backgroundColor: Colors.white,
       ),
-    );
-  }
-}
-
-class MyHome extends StatelessWidget {
-  const MyHome({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 4,
-      child: Scaffold(
-        drawer: Drawer(
-          child: ListView(
-            children: const [
-              UserAccountsDrawerHeader(
-                  accountName: Text('@com'), accountEmail: Text('ming'))
-            ],
-          ),
-        ),
-        bottomNavigationBar: Container(
-          color: Colors.black12,
-          height: 50,
-          child: const TabBar(
-            labelStyle: TextStyle(height: 0, fontSize: 10),
-            tabs: [
-              Tab(
-                icon: Icon(Icons.home),
-                text: "主页",
-              ),
-              Tab(
-                icon: Icon(Icons.shop),
-                text: "商城",
-              ),
-              Tab(
-                icon: Icon(Icons.message),
-                text: "消息",
-              ),
-              Tab(
-                icon: Icon(Icons.account_circle_sharp),
-                text: "我的",
-              )
-            ],
-          ),
-        ),
-        body: const TabBarView(children: [
-          Home(),
-          Text('ccc'),
-          Text('data'),
-          User(),
-        ]),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {},
-          mini: true,
-          child: const Icon(Icons.add),
-        ),
-        floatingActionButtonLocation:
-            FloatingActionButtonLocation.miniCenterDocked,
-      ),
+      builder: EasyLoading.init(),
     );
   }
 }
@@ -104,11 +54,47 @@ class Rooter extends StatefulWidget {
 }
 
 class _Rooter extends State<Rooter> {
+  int messageNum = 0;
+
+  @override
+  void initState() {
+    EventBusUtils.getInstance().on<EventBus_data>().listen((event) {
+      if (event.number != 0) {
+        setState(() {
+          messageNum = event.number;
+        });
+      }
+    });
+    super.initState();
+  }
+
   int _currentIndex = 0;
-  List<Widget> list = const [Home(), Attention(), MessagePage(), User()];
+  List<Widget> list = const [
+    Home(),
+    Attention(),
+    MessagePage(),
+    User(
+      /// 根据self来判断是自己还是其他用户
+      user_id: 'self',
+    )
+  ];
+
   _pickerVideo() async {
-    var video = await ImagePicker().pickVideo(source: ImageSource.gallery);
-    print('video' + video!.path);
+    int? isGetCamera = await chooseIsGetCamera(context: context);
+    ChooseMethod.setIsGetCamera(0);
+    String path = 'error';
+    if (isGetCamera == 0) return;
+    if (isGetCamera == 1) {
+      path = await chooseVideoPath(isGetCamera: true);
+    } else if (isGetCamera == 2) {
+      path = await chooseVideoPath(isGetCamera: false);
+    }
+
+    if (path != 'error') {
+      Navigator.of(context).push(
+        MaterialPageRoute(builder: (context) => ReviewUploadVideo(url: path)),
+      );
+    } else {}
   }
 
   @override
@@ -133,10 +119,31 @@ class _Rooter extends State<Rooter> {
                 )
               },
           selectedFontSize: 14,
-          items: const [
+          items: [
             BottomNavigationBarItem(icon: Icon(Icons.home), label: "首页"),
             BottomNavigationBarItem(icon: Icon(Icons.favorite), label: "关注"),
-            BottomNavigationBarItem(icon: Icon(Icons.message), label: "消息"),
+            BottomNavigationBarItem(
+                icon: messageNum != 0
+                    ? Stack(
+                        children: [
+                          Container(
+                            child: Icon(Icons.message),
+                          ),
+                          Positioned(
+                            right: -1,
+                            child: Container(
+                              height: 10,
+                              width: 10,
+                              decoration: BoxDecoration(
+                                color: Colors.red,
+                                borderRadius: BorderRadius.circular(6.0),
+                              ),
+                            ),
+                          )
+                        ],
+                      )
+                    : Icon(Icons.message),
+                label: "消息"),
             BottomNavigationBarItem(
                 icon: Icon(Icons.account_circle_sharp), label: "我的"),
           ]),
@@ -174,8 +181,11 @@ class _Rooter extends State<Rooter> {
                   borderRadius: BorderRadius.circular(2),
                 ),
                 onTap: (() {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => const PublishArticle()));
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const PublishArticle(),
+                    ),
+                  );
                 }),
               )
             ],

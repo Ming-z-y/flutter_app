@@ -1,41 +1,54 @@
 import 'package:bruno/bruno.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/aboutUser/editMessage/editMessage.dart';
+import 'package:flutter_application_1/aboutUser/setting/setting.dart';
 
 class UserCover extends StatefulWidget {
-  const UserCover({
-    Key? key,
-    required this.coverImage,
-    required this.userName,
-    required this.label,
-    this.userImage = '',
-    this.decoration = "暂无描述",
-  }) : super(key: key);
-
   final String coverImage;
   final String userName;
   final String decoration;
   final String label;
   final String userImage;
+  final int focus_num;
+  final int fans_num;
+  final int bethumbed_up;
+  final String user_id;
+
+  const UserCover({
+    Key? key,
+    required this.coverImage,
+    required this.userName,
+    required this.label,
+    required this.focus_num,
+    required this.fans_num,
+    required this.bethumbed_up,
+    required this.user_id,
+    this.userImage = '',
+    this.decoration = "暂无描述",
+  }) : super(key: key);
 
   @override
-  State<UserCover> createState() {
-    return _UserCover();
-  }
+  State<UserCover> createState() => _UserCover();
 }
 
 class _UserCover extends State<UserCover> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 500,
+      height: 450,
       // width: double.infinity,
       padding: const EdgeInsets.only(top: 20, left: 20),
       decoration: BoxDecoration(
-        color: Colors.green,
+        color: Colors.white,
+        // image: CachedNetworkImage(
+        //   imageUrl: widget.coverImage,
+        // ),
         image: DecorationImage(
-          image: NetworkImage(widget.coverImage),
+          image: const AssetImage('assets/image/cover.jpg'),
           fit: BoxFit.fill,
+          colorFilter: ColorFilter.mode(
+              Colors.black.withOpacity(0.4), BlendMode.srcOver),
         ),
       ),
       child: Column(
@@ -50,10 +63,15 @@ class _UserCover extends State<UserCover> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 ClipOval(
-                  child: Image(
+                  child: CachedNetworkImage(
                     width: 90,
                     height: 90,
-                    image: NetworkImage(widget.userImage),
+                    imageUrl: widget.userImage,
+                    progressIndicatorBuilder:
+                        (context, url, downloadProgress) =>
+                            LinearProgressIndicator(
+                      value: downloadProgress.progress,
+                    ),
                   ),
                 ),
                 Container(
@@ -93,12 +111,12 @@ class _UserCover extends State<UserCover> {
           Row(
             children: [
               Column(
-                children: const [
+                children: [
                   Text(
-                    '651',
+                    '${widget.focus_num}',
                     style: TextStyle(color: Colors.white, fontSize: 20),
                   ),
-                  Text(
+                  const Text(
                     '关注',
                     style: TextStyle(color: Colors.white, fontSize: 14),
                   )
@@ -107,12 +125,12 @@ class _UserCover extends State<UserCover> {
               Container(
                 margin: const EdgeInsets.only(left: 30),
                 child: Column(
-                  children: const [
+                  children: [
                     Text(
-                      '651',
-                      style: TextStyle(color: Colors.white, fontSize: 20),
+                      '${widget.fans_num}',
+                      style: const TextStyle(color: Colors.white, fontSize: 20),
                     ),
-                    Text(
+                    const Text(
                       '粉丝',
                       style: TextStyle(color: Colors.white, fontSize: 14),
                     )
@@ -122,12 +140,12 @@ class _UserCover extends State<UserCover> {
               Container(
                 margin: const EdgeInsets.only(left: 30),
                 child: Column(
-                  children: const [
+                  children: [
                     Text(
-                      '123991',
-                      style: TextStyle(color: Colors.white, fontSize: 20),
+                      '${widget.bethumbed_up}',
+                      style: const TextStyle(color: Colors.white, fontSize: 20),
                     ),
-                    Text(
+                    const Text(
                       '获赞与收藏',
                       style: TextStyle(color: Colors.white, fontSize: 14),
                     )
@@ -157,7 +175,7 @@ class _UserCover extends State<UserCover> {
               Row(
                 children: [
                   BrnTagCustom(
-                    tagText: '30岁',
+                    tagText: '19岁',
                     backgroundColor: const Color.fromRGBO(153, 153, 153, 0.85),
                     tagBorderRadius: const BorderRadius.all(Radius.circular(5)),
                     textPadding: const EdgeInsets.only(left: 5, right: 5),
@@ -182,47 +200,89 @@ class _UserCover extends State<UserCover> {
                 margin: const EdgeInsets.only(right: 10),
                 child: Row(
                   children: [
-                    SizedBox(
-                      height: 30,
-                      child: OutlinedButton(
-                        onPressed: (() {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => EditMessage()));
-                        }),
-                        style: OutlinedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18.0),
+                    widget.user_id == 'self'
+                        ? SizedBox(
+                            height: 30,
+                            child: OutlinedButton(
+                              onPressed: (() {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => EditMessage(
+                                      avatar: widget.userImage,
+                                    ),
+                                  ),
+                                );
+                              }),
+                              style: OutlinedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(18.0),
+                                ),
+                                side: const BorderSide(
+                                    width: 1.0, color: Colors.white),
+                              ),
+                              child: const Text(
+                                '编辑资料',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
+                          )
+                        : SizedBox(
+                            height: 30,
+                            child: OutlinedButton(
+                              onPressed: (() {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => EditMessage(
+                                      avatar: widget.userImage,
+                                    ),
+                                  ),
+                                );
+                              }),
+                              style: OutlinedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(18.0),
+                                ),
+                                side: const BorderSide(
+                                    width: 1.0, color: Colors.white),
+                              ),
+                              child: const Text(
+                                '关注',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
                           ),
-                          side:
-                              const BorderSide(width: 1.0, color: Colors.white),
-                        ),
-                        child: const Text(
-                          '编辑资料',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ),
-                    ),
                     const SizedBox(
                       width: 10,
                     ),
-                    SizedBox(
-                      height: 30,
-                      child: OutlinedButton(
-                        onPressed: (() {}),
-                        style: OutlinedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18.0),
-                          ),
-                          side: BorderSide(width: 1.0, color: Colors.white),
-                        ),
-                        child: const Text(
-                          '修改',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ),
-                    )
+                    widget.user_id == 'self'
+                        ? SizedBox(
+                            height: 30,
+                            child: OutlinedButton(
+                              onPressed: (() {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => Setting(),
+                                  ),
+                                );
+                              }),
+                              style: OutlinedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(18.0),
+                                ),
+                                side:
+                                    BorderSide(width: 1.0, color: Colors.white),
+                              ),
+                              child: const Icon(
+                                Icons.settings,
+                                color: Colors.white,
+                                size: 18,
+                              ),
+                            ),
+                          )
+                        : Container()
                   ],
                 ),
               )

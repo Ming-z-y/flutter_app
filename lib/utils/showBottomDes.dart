@@ -1,6 +1,5 @@
 import 'package:bruno/bruno.dart';
 import 'package:flutter/material.dart';
-import './chooseImage.dart';
 
 class ShowBottomDes {
   static chooseDescription(
@@ -123,9 +122,7 @@ class ShowBottomDes {
             int index,
             BrnCommonActionSheetItem actionEle,
           ) {
-            index == 0
-                ? ImageChoices.getPhoneImage()
-                : ImageChoices.getImageFromCamera();
+            index == 0 ? Text('X') : Text('xx');
           },
         );
       },

@@ -1,78 +1,67 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/request/apis.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import '../../components/rankItem.dart';
-import 'package:flutter_easyrefresh/easy_refresh.dart';
-import '../../utils/refreshComponent.dart';
 
 class Hot extends StatefulWidget {
   const Hot({super.key});
 
   @override
   State<Hot> createState() {
-    // TODO: implement createState
     return _Hot();
   }
 }
 
 class _Hot extends State<Hot> {
+  List content = [];
+  var index = 1;
+  @override
+  void initState() {
+    super.initState();
+    _getData();
+  }
+
+  _getData() {
+    APIS.hot().then((value) {
+      print(value.data);
+      print(value.status);
+      print(value.info);
+      setState(() {
+        content = value.data!;
+      });
+    });
+  }
+
+  Future<void> _onRefresh() async {
+    // 持续两秒
+    await Future.delayed(const Duration(milliseconds: 2000), () {
+      index = 1;
+      _getData();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return EasyRefresh(
-      onRefresh: () async {},
-      onLoad: () async {},
-      header: CustomRefreshHeader(),
-      footer: CustomRefreshFooter(),
-      child: ListView(
-        children: [
-          RankItem(
-            id: 1,
-            hot: 100,
-            imgUrl:
-                'https://ts1.cn.mm.bing.net/th/id/R-C.23034dbcaded6ab4169b9514f76f51b5?rik=mSGADwV9o%2fteUA&riu=http%3a%2f%2fpic.bizhi360.com%2fbbpic%2f40%2f9640_1.jpg&ehk=RYei4n5qyNCPVysJmE2a3WhxSOXqGQMGJcvWBmFyfdg%3d&risl=&pid=ImgRaw&r=0',
-            title: '2023最火发型，托尼老师手把手教学，教你如何搭配适合自己的发型',
-            index: 1,
-          ),
-          RankItem(
-            id: 1,
-            hot: 100,
-            imgUrl:
-                'https://ts1.cn.mm.bing.net/th/id/R-C.23034dbcaded6ab4169b9514f76f51b5?rik=mSGADwV9o%2fteUA&riu=http%3a%2f%2fpic.bizhi360.com%2fbbpic%2f40%2f9640_1.jpg&ehk=RYei4n5qyNCPVysJmE2a3WhxSOXqGQMGJcvWBmFyfdg%3d&risl=&pid=ImgRaw&r=0',
-            title: '2023最火发型，托尼老师手把手教学，教你如何搭配适合自己的发型',
-            index: 2,
-          ),
-          RankItem(
-            id: 1,
-            hot: 100,
-            imgUrl:
-                'https://ts1.cn.mm.bing.net/th/id/R-C.23034dbcaded6ab4169b9514f76f51b5?rik=mSGADwV9o%2fteUA&riu=http%3a%2f%2fpic.bizhi360.com%2fbbpic%2f40%2f9640_1.jpg&ehk=RYei4n5qyNCPVysJmE2a3WhxSOXqGQMGJcvWBmFyfdg%3d&risl=&pid=ImgRaw&r=0',
-            title: '2023最火发型，托尼老师手把手教学，教你如何搭配适合自己的发型',
-            index: 3,
-          ),
-          RankItem(
-            id: 1,
-            hot: 100,
-            imgUrl:
-                'https://ts1.cn.mm.bing.net/th/id/R-C.23034dbcaded6ab4169b9514f76f51b5?rik=mSGADwV9o%2fteUA&riu=http%3a%2f%2fpic.bizhi360.com%2fbbpic%2f40%2f9640_1.jpg&ehk=RYei4n5qyNCPVysJmE2a3WhxSOXqGQMGJcvWBmFyfdg%3d&risl=&pid=ImgRaw&r=0',
-            title: '2023最火发型，托尼老师手把手教学，教你如何搭配适合自己的发型',
-            index: 4,
-          ),
-          RankItem(
-            id: 1,
-            hot: 100,
-            imgUrl:
-                'https://ts1.cn.mm.bing.net/th/id/R-C.23034dbcaded6ab4169b9514f76f51b5?rik=mSGADwV9o%2fteUA&riu=http%3a%2f%2fpic.bizhi360.com%2fbbpic%2f40%2f9640_1.jpg&ehk=RYei4n5qyNCPVysJmE2a3WhxSOXqGQMGJcvWBmFyfdg%3d&risl=&pid=ImgRaw&r=0',
-            title: '2023最火发型，托尼老师手把手教学，教你如何搭配适合自己的发型',
-            index: 5,
-          ),
-          RankItem(
-            id: 1,
-            hot: 100,
-            imgUrl:
-                'https://ts1.cn.mm.bing.net/th/id/R-C.23034dbcaded6ab4169b9514f76f51b5?rik=mSGADwV9o%2fteUA&riu=http%3a%2f%2fpic.bizhi360.com%2fbbpic%2f40%2f9640_1.jpg&ehk=RYei4n5qyNCPVysJmE2a3WhxSOXqGQMGJcvWBmFyfdg%3d&risl=&pid=ImgRaw&r=0',
-            title: '2023最火发型，托尼老师手把手教学，教你如何搭配适合自己的发型',
-            index: 6,
-          )
-        ],
-      ),
+    return RefreshIndicator(
+      onRefresh: _onRefresh,
+      child: content.isNotEmpty
+          ? ListView(
+              children: content.map(
+                (item) {
+                  return RankItem(
+                    id: item["id"] ?? 0,
+                    hot: item["hot"] ?? 0,
+                    imgUrl: item["imgUrl"] ?? '',
+                    title: item["title"] ?? '',
+                    index: index++,
+                    content_url: 'xxx',
+                  );
+                },
+              ).toList(),
+            )
+          : const SpinKitPouringHourGlass(
+              color: Color.fromRGBO(138, 135, 240, 1),
+            ),
     );
   }
 }
