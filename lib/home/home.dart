@@ -1,13 +1,7 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/articleDetail/articleDetail.dart';
 import 'package:flutter_application_1/home/find/find.dart';
-import 'package:flutter_application_1/request/apis.dart';
-import 'package:flutter_application_1/utils/cache.dart';
 import '../searchPage/search.dart';
 import './hot/hot.dart';
-import '../request/httpUtil.dart';
 import '../utils/keepAliveWrapper.dart';
 
 class Home extends StatefulWidget {

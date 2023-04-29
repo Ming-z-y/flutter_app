@@ -1,10 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class BottomText extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
     return Bottom();
   }
 }
@@ -18,7 +16,6 @@ class Bottom extends State<BottomText> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Container(
       width: double.infinity,
       margin: const EdgeInsets.only(top: 30),

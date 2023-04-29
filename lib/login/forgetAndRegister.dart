@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/login/components/form.dart';
 import 'package:flutter_application_1/login/welcome.dart';
 import 'package:flutter_application_1/request/apis.dart';
-import 'package:flutter_application_1/request/httpUtil.dart';
 import 'package:flutter_application_1/utils/checkForm.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 

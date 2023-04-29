@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/login/components/bottomText.dart';
-import 'package:flutter_application_1/main.dart';
 import 'package:flutter_application_1/request/apis.dart';
 import 'package:flutter_application_1/utils/cache.dart';
 import 'package:flutter_application_1/utils/checkForm.dart';
@@ -112,7 +111,7 @@ class _InputForm extends State<InputForm> {
                         TextField(
                           controller: _phone,
                           cursorColor: Colors.white,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             icon: Icon(
                               Icons.phone,
                             ),
@@ -120,7 +119,7 @@ class _InputForm extends State<InputForm> {
                             labelText: '手机号',
                           ),
                         ),
-                        Positioned(
+                        const Positioned(
                           right: 10,
                           top: 30,
                           child: Text(

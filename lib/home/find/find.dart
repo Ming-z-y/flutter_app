@@ -1,8 +1,4 @@
-import 'package:bruno/bruno.dart';
 import 'package:flutter/material.dart';
-import 'package:easy_refresh/easy_refresh.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
-
 import '../../request/apis.dart';
 import '../../utils/keepAliveWrapper.dart';
 import 'generate.dart';
@@ -24,7 +20,6 @@ class _Find extends State<Find> {
   @override
   void initState() {
     super.initState();
-    // _tabController = TabController(length: tabs.length, vsync: this);
     _getCagetory();
   }
 

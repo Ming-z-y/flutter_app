@@ -1,9 +1,7 @@
-import 'package:bruno/bruno.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/searchPage/subPages/comprehensive.dart';
 import 'package:flutter_application_1/searchPage/subPages/current.dart';
 import '../utils/keepAliveWrapper.dart';
-
 import './subPages/user.dart';
 
 class SearchResult extends StatefulWidget {

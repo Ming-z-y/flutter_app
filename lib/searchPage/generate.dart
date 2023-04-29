@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_application_1/request/apis.dart';
 import 'package:flutter_application_1/searchPage/subPages/userItem.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-
 import '../components/articleItem.dart';
 
 class Generate extends StatefulWidget {
@@ -99,24 +98,4 @@ class _GenerateState extends State<Generate> {
                 ),
     );
   }
-
-  // @override
-  // Widget build(BuildContext context) {
-  //   // TODO: implement build
-  //   return Container(
-  //     padding: const EdgeInsets.all(20),
-  //     child: ListView.builder(
-  //       itemBuilder: ((context, index) {
-  //         return UserItem(
-  //           avatar:
-  //               'https://img.wxcha.com/m00/d9/57/2beacfbc1f0eb295cbfc0c5881839fe2.jpg?down',
-  //           nick_name: 'Matthew',
-  //           work_num: 12,
-  //           fans_num: 11,
-  //         );
-  //       }),
-  //       itemCount: 20,
-  //     ),
-  //   );
-  // }
 }

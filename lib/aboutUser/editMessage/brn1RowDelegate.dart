@@ -6,39 +6,6 @@ class Brn1RowDelegate implements BrnMultiDataPickerDelegate {
   int secondSelectedIndex = 0;
   int thirdSelectedIndex = 0;
   final List list = [];
-  // List list = [
-  //   {
-  //     'AAA': [
-  //       {
-  //         'AAA': ['8', '9']
-  //       }
-  //     ]
-  //   },
-  //   {
-  //     'BBB': [
-  //       {
-  //         'BBB': ['5', '6']
-  //       }
-  //     ]
-  //   },
-  //   {
-  //     'CCC': [
-  //       {
-  //         'CCC': ['3', '4']
-  //       }
-  //     ]
-  //   },
-  //   {
-  //     'DDD': [
-  //       {
-  //         'DDD': ['1', '2']
-  //       },
-  //       {
-  //         'DDD1': ['EEE1', 'EEE2']
-  //       }
-  //     ]
-  //   }
-  // ];
 
   Brn1RowDelegate({
     this.firstSelectedIndex = 0,

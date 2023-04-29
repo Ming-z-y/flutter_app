@@ -1,11 +1,12 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_application_1/publishArticle/reviewUploadVideo.dart';
 import 'package:flutter_application_1/publishArticle/uploadResult.dart';
+import 'package:flutter_application_1/request/websoctetApis.dart';
 import 'package:flutter_application_1/utils/chooseIsGetCamera.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import './home/home.dart'; // 首页页面
 import './aboutUser/user.dart'; // 用户页面
 import './attention/attention.dart'; //  关注页面
@@ -28,6 +29,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    DateTime? lastPopTime;
     return MaterialApp(
       routes: {
         '/login': ((context) => LoginPage()),
@@ -37,7 +39,32 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Startup Name Generator',
       // home: Rooter(),
-      home: LoginPage(),
+      home: WillPopScope(
+        child: const Scaffold(
+          body: Rooter(),
+        ),
+        onWillPop: () async {
+          if (lastPopTime == null ||
+              DateTime.now().difference(lastPopTime!) >
+                  const Duration(seconds: 1)) {
+            lastPopTime = DateTime.now();
+
+            Fluttertoast.showToast(
+              msg: '再按一次退出',
+              fontSize: 14,
+              gravity: ToastGravity.BOTTOM,
+              textColor: Colors.white,
+            );
+            return Future.value(false);
+          } else {
+            lastPopTime = DateTime.now();
+            // 退出app
+            WebSocketChannel.close();
+            return Future.value(true);
+          }
+        },
+      ),
+      // home: LoginPage(),
       theme: ThemeData(
         backgroundColor: Colors.white,
       ),

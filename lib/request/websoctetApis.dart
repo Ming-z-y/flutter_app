@@ -3,39 +3,14 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/request/base_config.dart';
 import 'package:flutter_application_1/utils/cache.dart';
-import 'package:html_editor_enhanced/utils/utils.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
-
-// class WebSocketAPIS {
-//   static late IOWebSocketChannel channel;
-//   static late dynamic _event;
-//   static Map<String, dynamic> headers = {"Cookie": AppCache.token};
-//   static init() {
-//     channel = IOWebSocketChannel.connect(
-//       'wss://${BASE_Config.HOST}/message',
-//       headers: headers,
-//     );
-//     channel.stream.listen((event) {
-//       _event = event;
-//     });
-//   }
-
-//   static data() {
-//     return StreamBuilder(
-//       builder: (context, snapshot) {
-//         print(snapshot.data);
-//         return Text(snapshot.hasData ? '${snapshot.hasData}' : '暂无消息');
-//       },
-//     );
-//   }
-// }
 
 class WebSocketChannel extends ChangeNotifier {
   // 创建WebSocketChannel 单利，全局只有一个对象
   WebSocketChannel._privateConstructor();
   late BuildContext contexts;
-  late IOWebSocketChannel channel;
+  static late IOWebSocketChannel channel;
 
   static final WebSocketChannel _instance =
       WebSocketChannel._privateConstructor();
@@ -78,7 +53,7 @@ class WebSocketChannel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void dispose() {
+  static close() {
     channel.sink.close();
   }
 }

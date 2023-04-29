@@ -118,33 +118,6 @@ class _FansMessageState extends State<FansMessage> {
                                 ],
                               ),
                             ),
-                            // Container(
-                            //   height: 35,
-                            //   decoration: BoxDecoration(
-                            //     borderRadius:
-                            //         const BorderRadius.all(Radius.circular(5)),
-                            //     color: is_focused
-                            //         ? const Color.fromRGBO(216, 216, 216, 1)
-                            //         : const Color.fromRGBO(234, 242, 255, 1),
-                            //   ),
-                            //   child: BrnIconButton(
-                            //     name: is_focused ? '已关注' : '回粉',
-                            //     direction: Direction.left,
-                            //     padding: 4,
-                            //     iconWidget: Icon(
-                            //       Icons.add,
-                            //       color: is_focused
-                            //           ? const Color.fromRGBO(153, 153, 153, 1)
-                            //           : const Color.fromRGBO(33, 126, 229, 1),
-                            //     ),
-                            //     style: TextStyle(
-                            //         color: is_focused
-                            //             ? const Color.fromRGBO(153, 153, 153, 1)
-                            //             : const Color.fromRGBO(
-                            //                 33, 126, 229, 1)),
-                            //     onTap: _onTap_focus,
-                            //   ),
-                            // ),
                           ],
                         ),
                       ),
@@ -154,8 +127,8 @@ class _FansMessageState extends State<FansMessage> {
               )
               .toList(),
           Container(
-            margin: EdgeInsets.only(top: 10),
-            child: Center(
+            margin: const EdgeInsets.only(top: 10),
+            child: const Center(
                 child: Text(
               '以下是历史关注',
               style: TextStyle(
