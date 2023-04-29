@@ -37,11 +37,9 @@ class _GenerateState extends State<Generate> {
   }
 
   _getData() {
-    print('xxx');
     if (widget.searchKey != '') {
       APIS.search(scope: widget.scope, key: widget.searchKey).then((value) {
         if (value.status == 10001) {
-          print(value.data);
           setState(() {
             data = value.data ?? [];
           });

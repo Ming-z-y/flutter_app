@@ -37,77 +37,89 @@ class _Main_Content extends State<Main_Content> {
     });
   }
 
+  Future<void> _onRefresh() async {
+    await Future.delayed(const Duration(milliseconds: 2000), () {
+      _getFocus();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: tabs.length + 1,
-      child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.white, // appBar的背景颜色
-          centerTitle: true,
-          toolbarHeight: 100,
-          elevation: 0,
-          title: Container(
-            alignment: Alignment.topLeft,
-            child: TabBar(
-              indicator: const BoxDecoration(),
-              unselectedLabelColor: const Color.fromRGBO(94, 83, 109, 1),
-              unselectedLabelStyle:
-                  const TextStyle(fontWeight: FontWeight.w400),
-              labelColor: const Color.fromRGBO(41, 31, 54, 1),
-              labelStyle: const TextStyle(fontWeight: FontWeight.w600),
-              tabs: [
-                FocusItem(
-                  isFull: true,
-                  user_id: 1,
-                  avatar: '2',
-                  nick_name: '1',
+    return RefreshIndicator(
+        onRefresh: _onRefresh,
+        child: DefaultTabController(
+          length: tabs.length + 1,
+          child: Scaffold(
+            appBar: AppBar(
+              backgroundColor: Colors.white, // appBar的背景颜色
+              centerTitle: true,
+              toolbarHeight: 100,
+              elevation: 0,
+              title: Container(
+                alignment: Alignment.topLeft,
+                child: TabBar(
+                  indicator: const BoxDecoration(),
+                  unselectedLabelColor: const Color.fromRGBO(94, 83, 109, 1),
+                  unselectedLabelStyle:
+                      const TextStyle(fontWeight: FontWeight.w400),
+                  labelColor: const Color.fromRGBO(41, 31, 54, 1),
+                  labelStyle: const TextStyle(fontWeight: FontWeight.w600),
+                  tabs: [
+                    const FocusItem(
+                      isFull: true,
+                      user_id: 1,
+                      avatar: '2',
+                      nick_name: '1',
+                    ),
+                    ...tabs
+                        .map(
+                          (item) => FocusItem(
+                            isFull: false,
+                            user_id: item['id'] ?? 0,
+                            avatar: item['avatar'] ?? '',
+                            nick_name: item['nick_name'] ?? '',
+                          ),
+                        )
+                        .toList()
+                  ],
+                  isScrollable: true,
                 ),
-                ...tabs
-                    .map(
-                      (item) => FocusItem(
-                        isFull: false,
-                        user_id: item['id'] ?? 0,
-                        avatar: item['avatar'] ?? '',
-                        nick_name: item['nick_name'] ?? '',
-                      ),
-                    )
-                    .toList()
-              ],
-              isScrollable: true,
+              ),
             ),
-          ),
-        ),
-        body: tabs.isNotEmpty
-            ? TabBarView(children: [
-                KeepAliveWrapper(
-                  child: GenerateContent(
-                    isFull: true,
-                    user_id: 1,
-                    onRefresh: _getFocus,
-                  ),
-                ),
-                ...tabs
-                    .map(
-                      (item) => KeepAliveWrapper(
-                        child: GenerateContent(
-                          isFull: false,
-                          user_id: item['id'],
-                          onRefresh: _getFocus,
-                        ),
+            body: tabs.isNotEmpty
+                ? TabBarView(children: [
+                    KeepAliveWrapper(
+                      child: GenerateContent(
+                        isFull: true,
+                        user_id: 1,
+                        onRefresh: _getFocus,
                       ),
-                    )
-                    .toList(),
-              ])
-            : isEmpty
-                ? Center(
-                    child: Text('还没有关注人哦~'),
-                  )
-                : const SpinKitPouringHourGlass(
-                    color: Color.fromRGBO(138, 135, 240, 1),
-                  ),
-        backgroundColor: Theme.of(context).backgroundColor,
-      ),
-    );
+                    ),
+                    ...tabs
+                        .map(
+                          (item) => KeepAliveWrapper(
+                            child: GenerateContent(
+                              isFull: false,
+                              user_id: item['id'],
+                              onRefresh: _getFocus,
+                            ),
+                          ),
+                        )
+                        .toList(),
+                  ])
+                : isEmpty
+                    ? ListView(
+                        children: const [
+                          Center(
+                            child: Text('还没有关注人哦~'),
+                          )
+                        ],
+                      )
+                    : const SpinKitPouringHourGlass(
+                        color: Color.fromRGBO(138, 135, 240, 1),
+                      ),
+            backgroundColor: Theme.of(context).backgroundColor,
+          ),
+        ));
   }
 }

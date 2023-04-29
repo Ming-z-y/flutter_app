@@ -36,8 +36,8 @@ class MyApp extends StatelessWidget {
       navigatorKey: navigatorKey,
       debugShowCheckedModeBanner: false,
       title: 'Startup Name Generator',
-      home: Rooter(),
-      // home: LoginPage(),
+      // home: Rooter(),
+      home: LoginPage(),
       theme: ThemeData(
         backgroundColor: Colors.white,
       ),

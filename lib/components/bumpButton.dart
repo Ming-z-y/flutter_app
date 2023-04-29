@@ -1,5 +1,8 @@
 import 'package:bruno/bruno.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+
+import '../request/apis.dart';
 
 class BumpButton extends StatefulWidget {
   final int user_id;
@@ -22,13 +25,28 @@ class BumpButton extends StatefulWidget {
 }
 
 class _BumpButtonState extends State<BumpButton> {
+  bool isBumped = false;
+
+  _onTap_focus() async {
+    var res = await APIS.focusPeople(
+      user_id: widget.user_id,
+      need_focus: !isBumped,
+    );
+    if (res.status == 10001) {
+      Fluttertoast.showToast(msg: widget.isBumped ? '取消关注成功' : '关注成功');
+      setState(() {
+        isBumped = !isBumped;
+      });
+    } else {
+      Fluttertoast.showToast(msg: isBumped ? '取消关注失败' : '关注失败');
+    }
+  }
+
   _onTap() {
     setState(() {
       isBumped = !isBumped;
     });
   }
-
-  bool isBumped = false;
 
   @override
   void initState() {
@@ -71,7 +89,7 @@ class _BumpButtonState extends State<BumpButton> {
                 : Color.fromRGBO(33, 126, 229, 1),
             fontSize: widget.fontSize,
           ),
-          onTap: _onTap,
+          onTap: _onTap_focus,
         ),
       ),
     );

@@ -1,5 +1,4 @@
 import 'dart:ui';
-import 'package:bruno/bruno.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/utils/cache.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -22,6 +21,7 @@ class User extends StatefulWidget {
 
 class _User extends State<User> {
   var user_data = {};
+  bool is_focused = false;
 
   @override
   void initState() {
@@ -40,6 +40,8 @@ class _User extends State<User> {
         if (value.status == 10001) {
           setState(() {
             user_data = value.data!;
+            is_focused = value.data!['is_focused'];
+            // print(is_focused);
           });
         } else {
           Fluttertoast.showToast(msg: '获取信息失败');
@@ -82,6 +84,7 @@ class _User extends State<User> {
                       fans_num: user_data['fans_num'] ?? 0,
                       bethumbed_up: user_data['bethumbed_up'] ?? 0,
                       user_id: widget.user_id,
+                      is_focused: is_focused,
                     ),
                   ),
                 ),
@@ -116,7 +119,8 @@ class _User extends State<User> {
                 .map((e) => KeepAliveWrapper(
                         child: GenerateContent(
                       user_id: widget.user_id,
-                      avatar: user_data['avatar'],
+                      avatar: user_data['avatar'] ??
+                          'https://photo.16pic.com/00/10/41/16pic_1041962_b.jpg',
                       tab: e,
                     )))
                 .toList(),

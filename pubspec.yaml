@@ -15,7 +15,7 @@ dependencies:
 
   fluttertoast: ^8.1.2
   html_editor_enhanced: ^2.5.1
-  # 选择
+  # 选择`
   image_picker: ^0.8.6+1
   # 视频播放
   video_player: ^2.5.1

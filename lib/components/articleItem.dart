@@ -101,18 +101,21 @@ class _ArticleItem extends State<ArticleItem> {
                   ),
                 ),
                 Container(
-                    margin: const EdgeInsets.only(left: 10, top: 5),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          widget.title,
-                          style: const TextStyle(
-                              fontSize: 23, fontWeight: FontWeight.w700),
-                        ),
-                        Text(widget.work_status),
-                      ],
-                    )),
+                  margin: const EdgeInsets.only(left: 10, top: 5),
+                  child: Wrap(
+                    children: [
+                      Text(
+                        widget.title,
+                        style: const TextStyle(
+                            fontSize: 23, fontWeight: FontWeight.w700),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  margin: const EdgeInsets.only(left: 10, top: 5),
+                  child: Text(widget.work_status),
+                ),
                 Container(
                   margin: const EdgeInsets.only(left: 10, top: 5),
                   child: Text(

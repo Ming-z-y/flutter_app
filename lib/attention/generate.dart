@@ -42,7 +42,7 @@ class _GenerateContent extends State<GenerateContent> {
             (value) {
               if (value.status == 10001) {
                 setState(() {
-                  data = value.data!["get_focus_works"];
+                  data = value.data!["get_focus_works"] ?? [];
                 });
                 if (data.isEmpty) {
                   setState(() {
@@ -56,7 +56,7 @@ class _GenerateContent extends State<GenerateContent> {
             (value) {
               if (value.status == 10001) {
                 setState(() {
-                  data = value.data!["get_focus_works"];
+                  data = value.data!["get_focus_works"] ?? [];
                 });
                 if (data.isEmpty) {
                   setState(() {
@@ -101,7 +101,7 @@ class _GenerateContent extends State<GenerateContent> {
             )
           : isEmpty
               ? ListView(
-                  children: [Center(child: Text('当前页为空'))],
+                  children: [Center(child: Text('关注者还没有发动态哦'))],
                 )
               : const SpinKitPouringHourGlass(
                   color: Color.fromRGBO(138, 135, 240, 1),
