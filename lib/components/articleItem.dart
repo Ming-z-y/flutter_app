@@ -1,7 +1,4 @@
-import 'dart:ui';
-
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:easy_refresh/easy_refresh.dart';
 import "package:flutter/material.dart";
 import 'package:flutter_application_1/articleDetail/articleDetail.dart';
 import 'package:flutter_application_1/components/errorImage.dart';
@@ -179,8 +176,8 @@ class _ArticleItem extends State<ArticleItem> {
                       child: Row(
                         children: [
                           Icon(
-                            Icons.favorite,
-                            color: Color.fromRGBO(255, 109, 109, 1),
+                            Icons.favorite_border,
+                            color: Colors.black,
                             size: 12,
                           ),
                           SizedBox(
@@ -197,11 +194,11 @@ class _ArticleItem extends State<ArticleItem> {
                       margin: const EdgeInsets.only(left: 10, top: 5),
                       child: Row(
                         children: [
-                          Icon(
+                          const Icon(
                             Icons.chat,
                             size: 12,
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 5,
                           ),
                           Text(

@@ -27,7 +27,7 @@ class _SettingState extends State<Setting> {
           ),
         ),
       ),
-      body: Text('xx'),
+      body: Text('设置界面'),
       backgroundColor: Theme.of(context).backgroundColor,
     );
   }

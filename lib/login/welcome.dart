@@ -1,8 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/request/apis.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
 import '../utils/cache.dart';
 import '../utils/showLoadingDialog.dart';
 
@@ -28,10 +26,7 @@ class _Welcome extends State<Welcome> {
     if (_controller.text == '') return Fluttertoast.showToast(msg: '未输入完整');
     ResponseModal<Map<String, dynamic>> value = await APIS.register(
         widget.phone, widget.code, widget.pwd, _controller.text);
-    print(value.status);
-    print(value.info);
-    print(value.data);
-    if (value.status == 10001) {
+    if (value.status == 10001 && value.data!['access_token'] != '') {
       showLoadingDialog(context);
       await AppCache.setToken(value.data!["access_token"]);
       await AppCache.setRefreshToken(value.data!["refresh_token"]);

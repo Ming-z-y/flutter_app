@@ -50,7 +50,6 @@ class _PublishVideoWeapper extends State<PublishVideoWeapper> {
             ChewieProgressColors(backgroundColor: Colors.amber),
         materialProgressColors: ChewieProgressColors(
           playedColor: Colors.orange,
-          // bufferedColor: Colors.black,
         ),
       );
     });
@@ -78,7 +77,6 @@ class _PublishVideoWeapper extends State<PublishVideoWeapper> {
           ),
         ),
         SizedBox(
-          // height: 370,
           child: widget.child,
         )
       ],

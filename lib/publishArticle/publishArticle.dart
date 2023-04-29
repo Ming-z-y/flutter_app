@@ -1,19 +1,14 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/utils/queryIsChecked.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
-import 'package:qiniu_flutter_sdk/qiniu_flutter_sdk.dart' as QINIUQ;
-import 'package:path_provider/path_provider.dart';
 import '../request/apis.dart';
 import '../utils/chooseImg.dart';
 import '../utils/chooseIsGetCamera.dart';
 import '../utils/createFile.dart';
 import '../utils/crop_image.dart';
 import '../utils/showLoadingDialog.dart';
-import './components/articleEditor.dart';
-import './components/videoEditor.dart';
 import 'chooseCategory.dart';
 
 class PublishArticle extends StatefulWidget {

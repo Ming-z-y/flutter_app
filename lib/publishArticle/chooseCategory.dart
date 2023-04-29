@@ -31,24 +31,17 @@ Widget buildItem(
     {required String title,
     Function(String t)? onTap,
     required BuildContext context}) {
-  //添加点击事件
   return InkWell(
-    //点击回调
     onTap: () {
-      //关闭弹框
       Navigator.of(context).pop();
-      //外部回调
       if (onTap != null) {
         onTap(title);
       }
     },
     child: Container(
       height: 40,
-      //左右排开的线性布局
       child: Row(
-        //所有的子Widget 水平方向居中
         mainAxisAlignment: MainAxisAlignment.center,
-        //所有的子Widget 竖直方向居中
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [Text(title)],
       ),

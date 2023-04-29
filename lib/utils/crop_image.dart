@@ -12,13 +12,6 @@ Future<String?> crop_image({
 }) async {
   CroppedFile? croppedFile = await ImageCropper().cropImage(
     sourcePath: sourcePath,
-    // aspectRatioPresets: [
-    //   CropAspectRatioPreset.square,
-    //   CropAspectRatioPreset.ratio3x2,
-    //   CropAspectRatioPreset.original,
-    //   CropAspectRatioPreset.ratio4x3,
-    //   CropAspectRatioPreset.ratio16x9
-    // ],
     aspectRatio: const CropAspectRatio(ratioX: 329, ratioY: 190),
     maxHeight: maxHeight,
     maxWidth: maxWidth,

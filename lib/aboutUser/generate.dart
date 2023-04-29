@@ -1,10 +1,6 @@
-import 'package:easy_refresh/easy_refresh.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/components/articleItem.dart';
 import 'package:flutter_application_1/request/apis.dart';
-import 'package:flutter_application_1/utils/cache.dart';
-import 'package:flutter_application_1/utils/refreshComponent.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class GenerateContent extends StatefulWidget {

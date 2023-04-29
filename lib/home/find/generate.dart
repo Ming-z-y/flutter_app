@@ -1,4 +1,3 @@
-import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/components/articleItem.dart';
 import 'package:flutter_application_1/request/apis.dart';

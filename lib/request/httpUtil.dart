@@ -1,11 +1,7 @@
-import 'dart:io';
-
 import 'package:dio/dio.dart';
 import 'package:flutter_application_1/request/tokenInterceptor.dart';
-import 'package:flutter_application_1/utils/cache.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import './base_config.dart';
-import 'dart:convert' show json;
 
 class HttpUtil {
   static HttpUtil instance = HttpUtil._internal();

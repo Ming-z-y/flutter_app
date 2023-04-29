@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/searchPage/searchresult.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
-
 import '../utils/refreshComponent.dart';
 
 class SearchPage extends StatefulWidget {
@@ -133,46 +132,6 @@ class _SearchPage extends State<SearchPage> {
                           ),
                         ),
                       ),
-                      Container(
-                        margin: const EdgeInsets.only(right: 20),
-                        child: ElevatedButton(
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all(
-                                const Color.fromRGBO(246, 246, 246, 1)),
-                            shape: MaterialStateProperty.all(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                            ),
-                          ),
-                          onPressed: (() {}),
-                          child: Text(
-                            '男生医美靠谱吗，会不会...',
-                            style: TextStyle(
-                                color: Color.fromRGBO(90, 76, 112, 1)),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(right: 20),
-                        child: ElevatedButton(
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all(
-                                const Color.fromRGBO(246, 246, 246, 1)),
-                            shape: MaterialStateProperty.all(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                            ),
-                          ),
-                          onPressed: (() {}),
-                          child: Text(
-                            '脸部祛痘用什么好',
-                            style: TextStyle(
-                                color: Color.fromRGBO(90, 76, 112, 1)),
-                          ),
-                        ),
-                      )
                     ],
                   ),
                 ),
@@ -194,49 +153,12 @@ class _SearchPage extends State<SearchPage> {
                       color: Color.fromRGBO(51, 51, 51, 1),
                     ),
                   ),
-                ),
-                // 样例
+                ), // 样例
                 SizedBox(
                   height: 40,
                   child: ListTile(
                     title: const Text(
                       '男神逆袭计划',
-                      style: TextStyle(color: Color.fromRGBO(90, 76, 112, 1)),
-                    ),
-                    onTap: () {
-                      print("点击");
-                    },
-                  ),
-                ),
-                SizedBox(
-                  height: 40,
-                  child: ListTile(
-                    title: const Text(
-                      '男性不动刀可以做的医美',
-                      style: TextStyle(color: Color.fromRGBO(90, 76, 112, 1)),
-                    ),
-                    onTap: () {
-                      print("点击");
-                    },
-                  ),
-                ),
-                SizedBox(
-                  height: 40,
-                  child: ListTile(
-                    title: const Text(
-                      '提高气质小技巧',
-                      style: TextStyle(color: Color.fromRGBO(90, 76, 112, 1)),
-                    ),
-                    onTap: () {
-                      print("点击");
-                    },
-                  ),
-                ),
-                SizedBox(
-                  height: 40,
-                  child: ListTile(
-                    title: const Text(
-                      '寒风穿搭，博主手把手教学',
                       style: TextStyle(color: Color.fromRGBO(90, 76, 112, 1)),
                     ),
                     onTap: () {

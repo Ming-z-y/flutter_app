@@ -1,5 +1,4 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/publishArticle/publishVideoWeapper.dart';
 import 'package:flutter_application_1/request/apis.dart';
@@ -8,7 +7,6 @@ import 'package:flutter_application_1/utils/chooseIsGetCamera.dart';
 import 'package:flutter_application_1/utils/crop_image.dart';
 import 'package:flutter_application_1/utils/showLoadingDialog.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
 import '../utils/queryIsChecked.dart';
 import 'chooseCategory.dart';
 

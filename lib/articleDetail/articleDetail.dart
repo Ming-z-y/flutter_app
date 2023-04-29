@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:bruno/bruno.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
@@ -9,7 +8,6 @@ import 'package:flutter_application_1/articleDetail/components/videoWeapper.dart
 import 'package:flutter_application_1/request/apis.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:path_provider/path_provider.dart';
 
 class ArticleDetail extends StatefulWidget {
   final int work_id;

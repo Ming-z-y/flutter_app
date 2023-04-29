@@ -1,13 +1,9 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/utils/cache.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import '../request/apis.dart';
 import './generate.dart';
 import 'package:flutter_application_1/utils/keepAliveWrapper.dart';
 import './userCover/userCover.dart';
-import './userCollect/userCollect.dart';
-import 'package:flutter_easyrefresh/easy_refresh.dart';
 
 class User extends StatefulWidget {
   final String user_id;
