@@ -15,6 +15,7 @@ class Hot extends StatefulWidget {
 class _Hot extends State<Hot> {
   List content = [];
   var index = 1;
+  bool isEmpty = false;
   @override
   void initState() {
     super.initState();
@@ -23,9 +24,16 @@ class _Hot extends State<Hot> {
 
   _getData() {
     APIS.hot().then((value) {
+      print(value.info);
+      print(value.status);
       setState(() {
         content = value.data!;
       });
+      if (content.isEmpty) {
+        setState(() {
+          isEmpty = true;
+        });
+      }
     });
   }
 
@@ -56,9 +64,17 @@ class _Hot extends State<Hot> {
                 },
               ).toList(),
             )
-          : const SpinKitPouringHourGlass(
-              color: Color.fromRGBO(138, 135, 240, 1),
-            ),
+          : isEmpty
+              ? ListView(
+                  children: const [
+                    Center(
+                      child: Text('当前页为空'),
+                    ),
+                  ],
+                )
+              : const SpinKitPouringHourGlass(
+                  color: Color.fromRGBO(138, 135, 240, 1),
+                ),
     );
   }
 }

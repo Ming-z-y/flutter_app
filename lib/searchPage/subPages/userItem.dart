@@ -2,6 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/components/bumpButton.dart';
 
+import '../../aboutUser/user.dart';
+
 class UserItem extends StatefulWidget {
   final String avatar;
   final String nick_name;
@@ -33,20 +35,33 @@ class _UserItemState extends State<UserItem> {
         children: [
           Row(
             children: [
-              Container(
-                width: 39,
-                clipBehavior: Clip.hardEdge,
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(16.0)),
-                ),
-                child: CachedNetworkImage(
-                  imageUrl: widget.avatar,
-                  errorWidget: (context, url, error) {
-                    return Text('出错了');
-                  },
-                  progressIndicatorBuilder: (context, url, downloadProgress) =>
-                      LinearProgressIndicator(
-                    value: downloadProgress.progress,
+              InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => User(
+                        user_id: widget.user_id.toString(),
+                      ),
+                    ),
+                  );
+                },
+                child: Container(
+                  width: 39,
+                  clipBehavior: Clip.hardEdge,
+                  decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(16.0)),
+                  ),
+                  child: CachedNetworkImage(
+                    imageUrl: widget.avatar,
+                    errorWidget: (context, url, error) {
+                      return Text('出错了');
+                    },
+                    progressIndicatorBuilder:
+                        (context, url, downloadProgress) =>
+                            LinearProgressIndicator(
+                      value: downloadProgress.progress,
+                    ),
                   ),
                 ),
               ),
@@ -75,7 +90,7 @@ class _UserItemState extends State<UserItem> {
             user_id: widget.user_id,
             boxHeight: 19,
             fontSize: 10,
-            isBumped: true,
+            isBumped: false,
             iconSize: 15,
           )
         ],
